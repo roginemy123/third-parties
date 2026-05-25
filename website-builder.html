@@ -1,0 +1,1718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BlockForge — Visual Website Builder</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+<style>
+:root {
+  --bg: #0b0c0f;
+  --surface: #13151a;
+  --surface2: #1c1f27;
+  --surface3: #252932;
+  --border: #2e3240;
+  --accent: #e8ff47;
+  --accent2: #47c8ff;
+  --accent3: #ff6b47;
+  --text: #f0f2f8;
+  --text-dim: #7a8099;
+  --text-muted: #454b61;
+  --radius: 10px;
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'Instrument Sans', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ─── SCREEN MANAGEMENT ─── */
+.screen { display: none; }
+.screen.active { display: flex; flex-direction: column; min-height: 100vh; }
+
+/* ─── HEADER ─── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 32px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-badge {
+  background: var(--accent);
+  color: #0b0c0f;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  letter-spacing: 1px;
+}
+
+.header-actions { display: flex; gap: 12px; align-items: center; }
+
+.btn {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 13px;
+  padding: 9px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+}
+.btn-ghost:hover { background: var(--surface2); color: var(--text); border-color: var(--text-muted); }
+
+.btn-primary {
+  background: var(--accent);
+  color: #0b0c0f;
+}
+.btn-primary:hover { background: #d4eb2e; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(232,255,71,0.25); }
+
+.btn-danger {
+  background: rgba(255,107,71,0.12);
+  color: var(--accent3);
+  border: 1px solid rgba(255,107,71,0.25);
+}
+.btn-danger:hover { background: rgba(255,107,71,0.2); }
+
+.btn-sm { font-size: 12px; padding: 6px 14px; }
+
+/* ─── TEMPLATE SELECTION SCREEN ─── */
+#screen-templates {
+  background: var(--bg);
+}
+
+.template-hero {
+  padding: 64px 32px 40px;
+  text-align: center;
+  position: relative;
+}
+
+.template-hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 600px; height: 300px;
+  background: radial-gradient(ellipse at center, rgba(232,255,71,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--accent);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border: 1px solid rgba(232,255,71,0.3);
+  padding: 5px 14px;
+  border-radius: 100px;
+  margin-bottom: 20px;
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5vw, 60px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -2px;
+  margin-bottom: 16px;
+}
+
+.hero-title span { color: var(--accent); }
+
+.hero-sub {
+  color: var(--text-dim);
+  font-size: 16px;
+  max-width: 480px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.template-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 24px;
+  padding: 24px 32px 60px;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.template-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  position: relative;
+}
+
+.template-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(232,255,71,0.15);
+}
+
+.template-card.selected {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(232,255,71,0.3);
+}
+
+.template-preview {
+  height: 220px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Template 1: Agency */
+.preview-agency {
+  background: #f8f5ef;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  gap: 8px;
+}
+.p-agency-nav { background: #1a1a1a; height: 28px; border-radius: 5px; display: flex; align-items: center; padding: 0 10px; gap: 6px; }
+.p-agency-nav span { height: 6px; background: #f8f5ef; border-radius: 3px; }
+.p-agency-nav span:first-child { width: 40px; }
+.p-agency-nav span:last-child { width: 20px; margin-left: auto; }
+.p-agency-hero { flex: 1; background: linear-gradient(135deg, #ff6b2b 0%, #ff4e6a 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 6px; }
+.p-agency-hero h3 { color: #fff; font-size: 14px; font-weight: 700; font-family: var(--font-display); }
+.p-agency-hero p { color: rgba(255,255,255,0.7); font-size: 9px; }
+.p-agency-hero-btn { background: #fff; color: #ff6b2b; font-size: 8px; font-weight: 700; padding: 4px 10px; border-radius: 4px; }
+.p-agency-row { display: flex; gap: 6px; height: 40px; }
+.p-agency-card { flex: 1; background: #fff; border-radius: 6px; border: 1px solid #e8e0d5; }
+
+/* Template 2: SaaS */
+.preview-saas {
+  background: #060814;
+  display: flex;
+  flex-direction: column;
+  padding: 14px;
+  gap: 8px;
+}
+.p-saas-nav { display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
+.p-saas-logo { width: 20px; height: 20px; background: linear-gradient(135deg, #7c3aed, #4f8ef7); border-radius: 5px; }
+.p-saas-dots { display: flex; gap: 10px; margin-left: auto; }
+.p-saas-dots span { width: 24px; height: 4px; background: rgba(255,255,255,0.15); border-radius: 2px; }
+.p-saas-hero { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; position: relative; }
+.p-saas-glow { position: absolute; width: 120px; height: 60px; background: radial-gradient(ellipse, rgba(124,58,237,0.4) 0%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%,-50%); }
+.p-saas-tag { background: rgba(124,58,237,0.2); border: 1px solid rgba(124,58,237,0.4); color: #a78bfa; font-size: 7px; padding: 2px 8px; border-radius: 20px; font-family: var(--font-mono); z-index: 1; }
+.p-saas-h { color: #fff; font-size: 13px; font-weight: 800; font-family: var(--font-display); z-index: 1; text-align: center; }
+.p-saas-btn { background: linear-gradient(90deg, #7c3aed, #4f8ef7); color: #fff; font-size: 8px; padding: 4px 14px; border-radius: 5px; z-index: 1; }
+.p-saas-cards { display: flex; gap: 6px; height: 42px; }
+.p-saas-card { flex: 1; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 7px; }
+
+/* Template 3: Portfolio */
+.preview-portfolio {
+  background: #fafafa;
+  display: flex;
+  padding: 14px;
+  gap: 10px;
+}
+.p-port-sidebar { width: 70px; display: flex; flex-direction: column; gap: 6px; }
+.p-port-avatar { width: 50px; height: 50px; background: linear-gradient(135deg, #0ea5e9, #6366f1); border-radius: 50%; }
+.p-port-name { height: 7px; background: #1a1a1a; border-radius: 3px; width: 55px; }
+.p-port-role { height: 5px; background: #ccc; border-radius: 3px; width: 40px; }
+.p-port-links { display: flex; flex-direction: column; gap: 4px; margin-top: 4px; }
+.p-port-links span { height: 5px; background: #e0e0e0; border-radius: 3px; width: 45px; }
+.p-port-main { flex: 1; display: flex; flex-direction: column; gap: 7px; }
+.p-port-title { height: 18px; background: #1a1a1a; border-radius: 4px; width: 80%; }
+.p-port-sub { height: 6px; background: #ccc; border-radius: 3px; width: 90%; }
+.p-port-sub2 { height: 6px; background: #ccc; border-radius: 3px; width: 65%; }
+.p-port-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; flex: 1; }
+.p-port-item { background: linear-gradient(135deg, #e0e7ff, #f0f9ff); border-radius: 5px; }
+
+.template-info { padding: 20px; }
+
+.template-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.template-name {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.template-desc { color: var(--text-dim); font-size: 13px; line-height: 1.5; margin-bottom: 16px; }
+
+.template-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.tag {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 100px;
+  background: var(--surface2);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  font-family: var(--font-mono);
+}
+
+.template-select-btn {
+  width: 100%;
+  margin-top: 16px;
+  padding: 11px;
+  font-size: 13px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.template-select-btn:hover { background: var(--accent); color: #0b0c0f; border-color: var(--accent); }
+
+/* ─── BUILDER SCREEN ─── */
+#screen-builder {
+  flex-direction: row;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.builder-sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sidebar-header {
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-title {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+.sidebar-sub { font-size: 11px; color: var(--text-muted); }
+
+.block-categories {
+  display: flex;
+  gap: 6px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.cat-btn {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  padding: 4px 10px;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  letter-spacing: 0.5px;
+}
+.cat-btn.active { background: var(--accent); color: #0b0c0f; border-color: var(--accent); }
+.cat-btn:hover:not(.active) { border-color: var(--text-muted); color: var(--text); }
+
+.blocks-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.blocks-list::-webkit-scrollbar { width: 4px; }
+.blocks-list::-webkit-scrollbar-track { background: transparent; }
+.blocks-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+.block-item {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  cursor: grab;
+  transition: all 0.15s;
+  user-select: none;
+}
+.block-item:hover {
+  border-color: var(--accent);
+  background: rgba(232,255,71,0.04);
+  transform: translateX(2px);
+}
+.block-item:active { cursor: grabbing; }
+
+.block-item-icon {
+  width: 32px; height: 32px;
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.block-item-name {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.block-item-desc { font-size: 10px; color: var(--text-muted); line-height: 1.4; }
+
+/* Builder main area */
+.builder-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.builder-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  height: 56px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  flex-shrink: 0;
+  gap: 12px;
+}
+
+.topbar-center {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.viewport-btn {
+  width: 32px; height: 32px;
+  border-radius: 7px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  transition: all 0.15s;
+}
+.viewport-btn.active { background: var(--surface2); border-color: var(--border); color: var(--text); }
+.viewport-btn:hover:not(.active) { color: var(--text); }
+
+.template-label {
+  font-size: 12px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  padding: 4px 12px;
+  background: var(--surface2);
+  border-radius: 100px;
+  border: 1px solid var(--border);
+}
+
+.builder-canvas-wrap {
+  flex: 1;
+  overflow-y: auto;
+  background: #0e0f14;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size: 24px 24px;
+  display: flex;
+  justify-content: center;
+  padding: 24px;
+}
+
+.builder-canvas {
+  background: white;
+  width: 100%;
+  max-width: 900px;
+  min-height: 600px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+  position: relative;
+  transition: max-width 0.3s ease;
+}
+
+.builder-canvas.tablet { max-width: 768px; }
+.builder-canvas.mobile { max-width: 390px; }
+
+.canvas-drop-zone {
+  min-height: 600px;
+}
+
+.canvas-empty-hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  gap: 12px;
+  color: #999;
+  font-size: 13px;
+  border: 2px dashed #e0e0e0;
+  margin: 20px;
+  border-radius: 10px;
+  padding: 40px;
+  transition: all 0.2s;
+}
+.canvas-empty-hint.drag-over { border-color: #7c3aed; background: rgba(124,58,237,0.04); color: #7c3aed; }
+.canvas-empty-hint .hint-icon { font-size: 32px; }
+
+/* ─── CANVAS BLOCKS ─── */
+.canvas-block {
+  position: relative;
+  transition: outline 0.1s;
+}
+.canvas-block:hover { outline: 2px solid rgba(124,58,237,0.4); outline-offset: -2px; }
+.canvas-block.selected { outline: 2px solid #7c3aed; outline-offset: -2px; }
+
+.block-controls {
+  position: absolute;
+  top: 8px; right: 8px;
+  display: none;
+  gap: 4px;
+  z-index: 10;
+}
+.canvas-block:hover .block-controls,
+.canvas-block.selected .block-controls { display: flex; }
+
+.block-ctrl-btn {
+  width: 28px; height: 28px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+  transition: all 0.15s;
+}
+.block-ctrl-btn.move { background: rgba(0,0,0,0.7); color: #fff; cursor: grab; }
+.block-ctrl-btn.del { background: rgba(220,50,50,0.85); color: #fff; }
+.block-ctrl-btn:hover { transform: scale(1.1); }
+
+/* Drop indicator */
+.drop-indicator {
+  height: 4px;
+  background: #7c3aed;
+  border-radius: 4px;
+  margin: 0 16px;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.drop-indicator.visible { opacity: 1; }
+
+/* ─── BLOCK STYLES ─── */
+
+/* Hero */
+.b-hero {
+  padding: 72px 48px;
+  text-align: center;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: white;
+}
+.b-hero h1 { font-size: 42px; font-weight: 800; font-family: var(--font-display); margin-bottom: 16px; line-height: 1.1; }
+.b-hero p { font-size: 16px; opacity: 0.7; max-width: 500px; margin: 0 auto 28px; line-height: 1.6; }
+.b-hero-btn { display: inline-block; background: #e8ff47; color: #1a1a2e; padding: 14px 32px; border-radius: 8px; font-weight: 700; font-size: 14px; text-decoration: none; }
+
+/* Navbar */
+.b-nav {
+  display: flex; align-items: center; padding: 16px 32px;
+  background: white; border-bottom: 1px solid #f0f0f0;
+  justify-content: space-between;
+}
+.b-nav-logo { font-size: 18px; font-weight: 800; font-family: var(--font-display); color: #1a1a1a; }
+.b-nav-links { display: flex; gap: 24px; }
+.b-nav-links a { font-size: 13px; color: #555; text-decoration: none; }
+.b-nav-cta { background: #1a1a1a; color: white; padding: 8px 20px; border-radius: 7px; font-size: 13px; font-weight: 600; text-decoration: none; }
+
+/* Features */
+.b-features { padding: 64px 48px; background: #fafafa; }
+.b-features h2 { text-align: center; font-size: 28px; font-weight: 800; font-family: var(--font-display); margin-bottom: 8px; color: #1a1a1a; }
+.b-features-sub { text-align: center; color: #777; font-size: 14px; margin-bottom: 40px; }
+.b-features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.b-feature-card { background: white; border-radius: 12px; padding: 24px; border: 1px solid #eee; }
+.b-feature-icon { font-size: 24px; margin-bottom: 12px; }
+.b-feature-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; color: #1a1a1a; }
+.b-feature-text { font-size: 13px; color: #777; line-height: 1.5; }
+
+/* Text block */
+.b-text { padding: 40px 48px; background: white; }
+.b-text h2 { font-size: 24px; font-weight: 700; font-family: var(--font-display); margin-bottom: 12px; color: #1a1a1a; }
+.b-text p { font-size: 14px; color: #555; line-height: 1.7; }
+
+/* CTA */
+.b-cta { padding: 64px 48px; text-align: center; background: linear-gradient(135deg, #7c3aed 0%, #4f8ef7 100%); color: white; }
+.b-cta h2 { font-size: 32px; font-weight: 800; font-family: var(--font-display); margin-bottom: 12px; }
+.b-cta p { font-size: 15px; opacity: 0.8; margin-bottom: 28px; }
+.b-cta-btn { display: inline-block; background: white; color: #7c3aed; padding: 14px 36px; border-radius: 8px; font-weight: 700; font-size: 14px; text-decoration: none; }
+
+/* Stats */
+.b-stats { padding: 48px; background: #1a1a2e; color: white; }
+.b-stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.b-stat { text-align: center; }
+.b-stat-num { font-size: 40px; font-weight: 800; font-family: var(--font-display); color: #e8ff47; }
+.b-stat-label { font-size: 13px; opacity: 0.6; margin-top: 4px; }
+
+/* Testimonial */
+.b-testimonial { padding: 56px 48px; background: white; text-align: center; }
+.b-testimonial blockquote { font-size: 20px; font-style: italic; color: #333; line-height: 1.5; max-width: 560px; margin: 0 auto 24px; }
+.b-testimonial-author { font-size: 13px; font-weight: 700; color: #1a1a1a; }
+.b-testimonial-role { font-size: 12px; color: #999; }
+
+/* Gallery */
+.b-gallery { padding: 48px; background: #f5f5f5; }
+.b-gallery h2 { font-size: 24px; font-weight: 700; font-family: var(--font-display); margin-bottom: 24px; color: #1a1a1a; }
+.b-gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.b-gallery-item { aspect-ratio: 4/3; border-radius: 10px; }
+
+/* Footer */
+.b-footer { padding: 40px 48px; background: #0f0f14; color: white; }
+.b-footer-inner { display: flex; justify-content: space-between; align-items: center; }
+.b-footer-logo { font-size: 16px; font-weight: 800; font-family: var(--font-display); }
+.b-footer-links { display: flex; gap: 20px; }
+.b-footer-links a { font-size: 12px; color: rgba(255,255,255,0.4); text-decoration: none; }
+.b-footer-copy { font-size: 12px; color: rgba(255,255,255,0.3); }
+
+/* Image block */
+.b-image { padding: 32px 48px; background: white; }
+.b-image img { width: 100%; border-radius: 12px; display: block; }
+.b-image-placeholder { width: 100%; height: 240px; background: linear-gradient(135deg, #e0e7ff, #f0f9ff); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 32px; }
+
+/* Pricing */
+.b-pricing { padding: 64px 48px; background: white; }
+.b-pricing h2 { text-align: center; font-size: 28px; font-weight: 800; font-family: var(--font-display); margin-bottom: 8px; color: #1a1a1a; }
+.b-pricing-sub { text-align: center; color: #777; font-size: 14px; margin-bottom: 40px; }
+.b-pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.b-pricing-card { border: 1px solid #eee; border-radius: 14px; padding: 28px 24px; text-align: center; }
+.b-pricing-card.featured { background: #1a1a2e; color: white; border-color: transparent; }
+.b-pricing-plan { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #999; margin-bottom: 12px; }
+.b-pricing-card.featured .b-pricing-plan { color: rgba(255,255,255,0.5); }
+.b-pricing-price { font-size: 36px; font-weight: 800; font-family: var(--font-display); color: #1a1a1a; }
+.b-pricing-card.featured .b-pricing-price { color: #e8ff47; }
+.b-pricing-period { font-size: 12px; color: #999; margin-bottom: 20px; }
+.b-pricing-btn { display: block; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 700; text-align: center; cursor: pointer; }
+.b-pricing-card:not(.featured) .b-pricing-btn { background: #f4f4f4; color: #1a1a1a; }
+.b-pricing-card.featured .b-pricing-btn { background: #e8ff47; color: #1a1a2e; }
+
+/* ─── DRAG HELPER ─── */
+.ui-draggable-helper {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  font-family: var(--font-body);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  z-index: 9999;
+  pointer-events: none;
+}
+
+/* ─── PROPERTIES PANEL ─── */
+.builder-props {
+  width: 240px;
+  flex-shrink: 0;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.props-header {
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.props-title {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.props-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--text-muted);
+  font-size: 12px;
+  padding: 20px;
+  text-align: center;
+}
+
+.props-empty-icon { font-size: 28px; opacity: 0.4; }
+
+.props-body { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 12px; }
+.props-body::-webkit-scrollbar { width: 4px; }
+.props-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+.prop-group { }
+.prop-label { font-size: 10px; font-family: var(--font-mono); color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+.prop-input {
+  width: 100%; padding: 7px 10px; font-size: 12px; border-radius: 7px;
+  border: 1px solid var(--border); background: var(--surface2); color: var(--text);
+  font-family: var(--font-body); outline: none; transition: border-color 0.15s;
+}
+.prop-input:focus { border-color: var(--accent); }
+.prop-color { width: 100%; height: 34px; border-radius: 7px; border: 1px solid var(--border); padding: 2px; cursor: pointer; background: var(--surface2); }
+.prop-row { display: flex; gap: 6px; }
+.prop-row .prop-input { flex: 1; }
+
+.props-actions { padding: 12px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 6px; }
+
+/* Toast */
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 10px 20px; border-radius: 100px;
+  font-size: 13px; font-weight: 500;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  z-index: 9999;
+  opacity: 0;
+  transition: all 0.25s ease;
+  pointer-events: none;
+  display: flex; align-items: center; gap: 8px;
+  white-space: nowrap;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+
+/* Sortable placeholder */
+.canvas-placeholder {
+  background: rgba(124,58,237,0.08);
+  border: 2px dashed rgba(124,58,237,0.4);
+  border-radius: 6px;
+  height: 60px;
+  margin: 4px 0;
+}
+
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- SCREEN 1: Template Selection               -->
+<!-- ══════════════════════════════════════════ -->
+<div id="screen-templates" class="screen active">
+  <div class="header">
+    <div class="logo">
+      ⬡ BlockForge
+      <span class="logo-badge">BETA</span>
+    </div>
+    <div class="header-actions">
+      <span style="font-size:12px;color:var(--text-muted);font-family:var(--font-mono);">Pick a template to start</span>
+    </div>
+  </div>
+
+  <div class="template-hero">
+    <div class="hero-tag">✦ Visual Builder</div>
+    <h1 class="hero-title">Build it.<br><span>Ship it.</span></h1>
+    <p class="hero-sub">Choose a template, then drag & drop blocks to craft your perfect website — no code required.</p>
+  </div>
+
+  <div class="template-grid">
+
+    <!-- Template 1: Agency -->
+    <div class="template-card" data-template="agency">
+      <div class="template-preview">
+        <div class="preview-agency">
+          <div class="p-agency-nav"><span></span><span></span><span></span></div>
+          <div class="p-agency-hero">
+            <h3>Creative Agency</h3>
+            <p>Bold ideas, bold results.</p>
+            <div class="p-agency-hero-btn">Get Started</div>
+          </div>
+          <div class="p-agency-row">
+            <div class="p-agency-card"></div>
+            <div class="p-agency-card"></div>
+            <div class="p-agency-card"></div>
+          </div>
+        </div>
+      </div>
+      <div class="template-info">
+        <div class="template-badge">01 — Agency</div>
+        <div class="template-name">Creative Studio</div>
+        <p class="template-desc">Bold, warm palette with high-contrast hero. Perfect for creative agencies, studios, and freelancers.</p>
+        <div class="template-tags">
+          <span class="tag">Agency</span>
+          <span class="tag">Portfolio</span>
+          <span class="tag">Bold</span>
+        </div>
+        <button class="template-select-btn" data-template="agency">
+          ✦ Use this template
+        </button>
+      </div>
+    </div>
+
+    <!-- Template 2: SaaS -->
+    <div class="template-card" data-template="saas">
+      <div class="template-preview">
+        <div class="preview-saas">
+          <div class="p-saas-nav">
+            <div class="p-saas-logo"></div>
+            <div class="p-saas-dots"><span></span><span></span><span></span></div>
+          </div>
+          <div class="p-saas-hero">
+            <div class="p-saas-glow"></div>
+            <div class="p-saas-tag">🚀 Now in beta</div>
+            <div class="p-saas-h">Ship faster</div>
+            <div class="p-saas-btn">Start free →</div>
+          </div>
+          <div class="p-saas-cards">
+            <div class="p-saas-card"></div>
+            <div class="p-saas-card"></div>
+            <div class="p-saas-card"></div>
+          </div>
+        </div>
+      </div>
+      <div class="template-info">
+        <div class="template-badge">02 — SaaS</div>
+        <div class="template-name">Product Launch</div>
+        <p class="template-desc">Dark, futuristic design with glowing gradients. Ideal for SaaS products, apps, and tech startups.</p>
+        <div class="template-tags">
+          <span class="tag">SaaS</span>
+          <span class="tag">Dark</span>
+          <span class="tag">Tech</span>
+        </div>
+        <button class="template-select-btn" data-template="saas">
+          ✦ Use this template
+        </button>
+      </div>
+    </div>
+
+    <!-- Template 3: Portfolio -->
+    <div class="template-card" data-template="portfolio">
+      <div class="template-preview">
+        <div class="preview-portfolio">
+          <div class="p-port-sidebar">
+            <div class="p-port-avatar"></div>
+            <div class="p-port-name"></div>
+            <div class="p-port-role"></div>
+            <div class="p-port-links">
+              <span></span><span></span><span></span>
+            </div>
+          </div>
+          <div class="p-port-main">
+            <div class="p-port-title"></div>
+            <div class="p-port-sub"></div>
+            <div class="p-port-sub2"></div>
+            <div class="p-port-grid">
+              <div class="p-port-item"></div>
+              <div class="p-port-item"></div>
+              <div class="p-port-item"></div>
+              <div class="p-port-item"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="template-info">
+        <div class="template-badge">03 — Portfolio</div>
+        <div class="template-name">Personal Portfolio</div>
+        <p class="template-desc">Clean, minimal layout with sidebar navigation. Great for designers, developers, and creatives.</p>
+        <div class="template-tags">
+          <span class="tag">Portfolio</span>
+          <span class="tag">Minimal</span>
+          <span class="tag">Clean</span>
+        </div>
+        <button class="template-select-btn" data-template="portfolio">
+          ✦ Use this template
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════ -->
+<!-- SCREEN 2: Builder                          -->
+<!-- ══════════════════════════════════════════ -->
+<div id="screen-builder" class="screen">
+
+  <!-- LEFT SIDEBAR: Blocks -->
+  <div class="builder-sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-title">⊞ Block Library</div>
+      <div class="sidebar-sub">Drag blocks onto the canvas</div>
+    </div>
+    <div class="block-categories">
+      <button class="cat-btn active" data-cat="all">All</button>
+      <button class="cat-btn" data-cat="layout">Layout</button>
+      <button class="cat-btn" data-cat="content">Content</button>
+      <button class="cat-btn" data-cat="media">Media</button>
+    </div>
+    <div class="blocks-list" id="blocks-list">
+
+      <!-- Layout blocks -->
+      <div class="block-item" data-block="nav" data-cat="layout" draggable="true">
+        <div class="block-item-icon" style="background:rgba(71,200,255,0.1);color:#47c8ff">≡</div>
+        <div class="block-item-name">Navigation Bar</div>
+        <div class="block-item-desc">Logo, links & CTA button</div>
+      </div>
+
+      <div class="block-item" data-block="hero" data-cat="layout" draggable="true">
+        <div class="block-item-icon" style="background:rgba(232,255,71,0.1);color:#e8ff47">⬛</div>
+        <div class="block-item-name">Hero Section</div>
+        <div class="block-item-desc">Full-width headline with CTA</div>
+      </div>
+
+      <div class="block-item" data-block="footer" data-cat="layout" draggable="true">
+        <div class="block-item-icon" style="background:rgba(255,107,71,0.1);color:#ff6b47">⊟</div>
+        <div class="block-item-name">Footer</div>
+        <div class="block-item-desc">Links, logo & copyright</div>
+      </div>
+
+      <!-- Content blocks -->
+      <div class="block-item" data-block="features" data-cat="content" draggable="true">
+        <div class="block-item-icon" style="background:rgba(124,58,237,0.1);color:#a78bfa">⊞</div>
+        <div class="block-item-name">Features Grid</div>
+        <div class="block-item-desc">3-column feature cards</div>
+      </div>
+
+      <div class="block-item" data-block="text" data-cat="content" draggable="true">
+        <div class="block-item-icon" style="background:rgba(16,185,129,0.1);color:#34d399">¶</div>
+        <div class="block-item-name">Text Block</div>
+        <div class="block-item-desc">Heading + body paragraph</div>
+      </div>
+
+      <div class="block-item" data-block="cta" data-cat="content" draggable="true">
+        <div class="block-item-icon" style="background:rgba(232,255,71,0.1);color:#e8ff47">→</div>
+        <div class="block-item-name">Call to Action</div>
+        <div class="block-item-desc">Bold CTA with button</div>
+      </div>
+
+      <div class="block-item" data-block="stats" data-cat="content" draggable="true">
+        <div class="block-item-icon" style="background:rgba(71,200,255,0.1);color:#47c8ff">#</div>
+        <div class="block-item-name">Stats Row</div>
+        <div class="block-item-desc">3 key metrics display</div>
+      </div>
+
+      <div class="block-item" data-block="testimonial" data-cat="content" draggable="true">
+        <div class="block-item-icon" style="background:rgba(255,107,71,0.1);color:#ff6b47">"</div>
+        <div class="block-item-name">Testimonial</div>
+        <div class="block-item-desc">Quote, author & role</div>
+      </div>
+
+      <div class="block-item" data-block="pricing" data-cat="content" draggable="true">
+        <div class="block-item-icon" style="background:rgba(16,185,129,0.1);color:#34d399">$</div>
+        <div class="block-item-name">Pricing Table</div>
+        <div class="block-item-desc">3-tier pricing cards</div>
+      </div>
+
+      <!-- Media blocks -->
+      <div class="block-item" data-block="image" data-cat="media" draggable="true">
+        <div class="block-item-icon" style="background:rgba(124,58,237,0.1);color:#a78bfa">⊡</div>
+        <div class="block-item-name">Image Block</div>
+        <div class="block-item-desc">Full-width image placeholder</div>
+      </div>
+
+      <div class="block-item" data-block="gallery" data-cat="media" draggable="true">
+        <div class="block-item-icon" style="background:rgba(232,255,71,0.1);color:#e8ff47">⊞</div>
+        <div class="block-item-name">Gallery Grid</div>
+        <div class="block-item-desc">3-column photo grid</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MAIN BUILDER AREA -->
+  <div class="builder-main">
+    <div class="builder-topbar">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <button class="btn btn-ghost btn-sm" id="btn-back-templates">← Templates</button>
+        <span class="template-label" id="current-template-label">Agency</span>
+      </div>
+      <div class="topbar-center">
+        <button class="viewport-btn active" data-view="desktop" title="Desktop">🖥</button>
+        <button class="viewport-btn" data-view="tablet" title="Tablet">📱</button>
+        <button class="viewport-btn" data-view="mobile" title="Mobile">📲</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <button class="btn btn-ghost btn-sm" id="btn-clear">Clear</button>
+        <button class="btn btn-primary btn-sm" id="btn-export">↓ Export HTML</button>
+      </div>
+    </div>
+
+    <div class="builder-canvas-wrap">
+      <div class="builder-canvas" id="builder-canvas">
+        <div class="canvas-drop-zone" id="canvas-drop-zone">
+          <div class="canvas-empty-hint" id="canvas-empty-hint">
+            <div class="hint-icon">⬡</div>
+            <strong>Drop blocks here</strong>
+            <span>Drag any block from the left panel</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL: Properties -->
+  <div class="builder-props">
+    <div class="props-header">
+      <div class="props-title">Properties</div>
+    </div>
+    <div id="props-empty" class="props-empty">
+      <div class="props-empty-icon">⊡</div>
+      <span>Click a block to edit its properties</span>
+    </div>
+    <div id="props-body" class="props-body" style="display:none">
+      <!-- Dynamic props go here -->
+    </div>
+    <div id="props-actions" class="props-actions" style="display:none">
+      <button class="btn btn-ghost btn-sm" id="btn-move-up">↑ Move Up</button>
+      <button class="btn btn-ghost btn-sm" id="btn-move-down">↓ Move Down</button>
+      <button class="btn btn-danger btn-sm" id="btn-delete-block">✕ Delete Block</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <div class="toast-dot"></div>
+  <span id="toast-msg">Block added!</span>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════
+let currentTemplate = null;
+let selectedBlock = null;
+let blockCounter = 0;
+
+// ══════════════════════════════════════════════════════
+// BLOCK DEFINITIONS
+// ══════════════════════════════════════════════════════
+const BLOCK_DEFS = {
+  nav: {
+    name: 'Navigation Bar',
+    render: (d) => `
+      <nav class="b-nav">
+        <div class="b-nav-logo">${d.logo||'BrandName'}</div>
+        <div class="b-nav-links">
+          <a href="#">${d.link1||'About'}</a>
+          <a href="#">${d.link2||'Work'}</a>
+          <a href="#">${d.link3||'Contact'}</a>
+        </div>
+        <a href="#" class="b-nav-cta">${d.cta||'Get Started'}</a>
+      </nav>`,
+    props: [
+      { id:'logo', label:'Brand Name', type:'text', default:'BrandName' },
+      { id:'link1', label:'Link 1', type:'text', default:'About' },
+      { id:'link2', label:'Link 2', type:'text', default:'Work' },
+      { id:'link3', label:'Link 3', type:'text', default:'Contact' },
+      { id:'cta', label:'CTA Text', type:'text', default:'Get Started' },
+    ]
+  },
+  hero: {
+    name: 'Hero Section',
+    render: (d) => `
+      <div class="b-hero" style="background:${d.bg||'linear-gradient(135deg,#1a1a2e 0%,#16213e 100%)'}">
+        <h1>${d.headline||'Build Something Amazing'}</h1>
+        <p>${d.sub||'The fastest way to launch your next project. No code required.'}</p>
+        <a href="#" class="b-hero-btn">${d.cta||'Get Started Free'}</a>
+      </div>`,
+    props: [
+      { id:'headline', label:'Headline', type:'text', default:'Build Something Amazing' },
+      { id:'sub', label:'Subheading', type:'text', default:'The fastest way to launch your next project.' },
+      { id:'cta', label:'Button Text', type:'text', default:'Get Started Free' },
+      { id:'bg', label:'Background', type:'color', default:'#1a1a2e' },
+    ]
+  },
+  features: {
+    name: 'Features Grid',
+    render: (d) => `
+      <div class="b-features">
+        <h2>${d.title||'Why Choose Us'}</h2>
+        <p class="b-features-sub">${d.sub||'Everything you need to build and ship faster.'}</p>
+        <div class="b-features-grid">
+          <div class="b-feature-card"><div class="b-feature-icon">⚡</div><div class="b-feature-title">${d.f1||'Lightning Fast'}</div><div class="b-feature-text">Optimized for performance at every step of your workflow.</div></div>
+          <div class="b-feature-card"><div class="b-feature-icon">🔒</div><div class="b-feature-title">${d.f2||'Secure by Default'}</div><div class="b-feature-text">Enterprise-grade security baked in from the start.</div></div>
+          <div class="b-feature-card"><div class="b-feature-icon">🎨</div><div class="b-feature-title">${d.f3||'Fully Customizable'}</div><div class="b-feature-text">Every pixel, every component, tailored to your brand.</div></div>
+        </div>
+      </div>`,
+    props: [
+      { id:'title', label:'Section Title', type:'text', default:'Why Choose Us' },
+      { id:'sub', label:'Subtitle', type:'text', default:'Everything you need.' },
+      { id:'f1', label:'Feature 1', type:'text', default:'Lightning Fast' },
+      { id:'f2', label:'Feature 2', type:'text', default:'Secure by Default' },
+      { id:'f3', label:'Feature 3', type:'text', default:'Fully Customizable' },
+    ]
+  },
+  text: {
+    name: 'Text Block',
+    render: (d) => `
+      <div class="b-text">
+        <h2>${d.title||'Our Story'}</h2>
+        <p>${d.body||'We started with a simple idea: make building websites accessible to everyone. Today, thousands of creators, founders, and teams use our platform to bring their ideas to life without writing a single line of code.'}</p>
+      </div>`,
+    props: [
+      { id:'title', label:'Heading', type:'text', default:'Our Story' },
+      { id:'body', label:'Body Text', type:'text', default:'We started with a simple idea...' },
+    ]
+  },
+  cta: {
+    name: 'Call to Action',
+    render: (d) => `
+      <div class="b-cta" style="background:${d.bg||'linear-gradient(135deg,#7c3aed 0%,#4f8ef7 100%)'}">
+        <h2>${d.title||'Ready to get started?'}</h2>
+        <p>${d.sub||'Join thousands of teams building with BlockForge today.'}</p>
+        <a href="#" class="b-cta-btn">${d.btn||'Start for free →'}</a>
+      </div>`,
+    props: [
+      { id:'title', label:'Heading', type:'text', default:'Ready to get started?' },
+      { id:'sub', label:'Subtext', type:'text', default:'Join thousands of teams.' },
+      { id:'btn', label:'Button', type:'text', default:'Start for free →' },
+      { id:'bg', label:'Background', type:'color', default:'#7c3aed' },
+    ]
+  },
+  stats: {
+    name: 'Stats Row',
+    render: (d) => `
+      <div class="b-stats">
+        <div class="b-stats-grid">
+          <div class="b-stat"><div class="b-stat-num">${d.s1||'10K+'}</div><div class="b-stat-label">${d.l1||'Happy Customers'}</div></div>
+          <div class="b-stat"><div class="b-stat-num">${d.s2||'99.9%'}</div><div class="b-stat-label">${d.l2||'Uptime SLA'}</div></div>
+          <div class="b-stat"><div class="b-stat-num">${d.s3||'50M+'}</div><div class="b-stat-label">${d.l3||'Pages Served'}</div></div>
+        </div>
+      </div>`,
+    props: [
+      { id:'s1', label:'Stat 1', type:'text', default:'10K+' },
+      { id:'l1', label:'Label 1', type:'text', default:'Happy Customers' },
+      { id:'s2', label:'Stat 2', type:'text', default:'99.9%' },
+      { id:'l2', label:'Label 2', type:'text', default:'Uptime SLA' },
+      { id:'s3', label:'Stat 3', type:'text', default:'50M+' },
+      { id:'l3', label:'Label 3', type:'text', default:'Pages Served' },
+    ]
+  },
+  testimonial: {
+    name: 'Testimonial',
+    render: (d) => `
+      <div class="b-testimonial">
+        <blockquote>"${d.quote||'This is the best tool we\'ve ever used. It completely changed how we build websites for our clients.'}"</blockquote>
+        <div class="b-testimonial-author">${d.author||'Sarah Chen'}</div>
+        <div class="b-testimonial-role">${d.role||'Design Lead, Acme Studio'}</div>
+      </div>`,
+    props: [
+      { id:'quote', label:'Quote', type:'text', default:"This is the best tool we've ever used." },
+      { id:'author', label:'Author', type:'text', default:'Sarah Chen' },
+      { id:'role', label:'Role', type:'text', default:'Design Lead, Acme Studio' },
+    ]
+  },
+  gallery: {
+    name: 'Gallery Grid',
+    render: (d) => `
+      <div class="b-gallery">
+        <h2>${d.title||'Our Work'}</h2>
+        <div class="b-gallery-grid">
+          <div class="b-gallery-item" style="background:linear-gradient(135deg,#e0e7ff,#c7d2fe)"></div>
+          <div class="b-gallery-item" style="background:linear-gradient(135deg,#fef3c7,#fde68a)"></div>
+          <div class="b-gallery-item" style="background:linear-gradient(135deg,#d1fae5,#a7f3d0)"></div>
+          <div class="b-gallery-item" style="background:linear-gradient(135deg,#fce7f3,#fbcfe8)"></div>
+          <div class="b-gallery-item" style="background:linear-gradient(135deg,#f0fdf4,#bbf7d0)"></div>
+          <div class="b-gallery-item" style="background:linear-gradient(135deg,#ede9fe,#ddd6fe)"></div>
+        </div>
+      </div>`,
+    props: [
+      { id:'title', label:'Gallery Title', type:'text', default:'Our Work' },
+    ]
+  },
+  image: {
+    name: 'Image Block',
+    render: (d) => `
+      <div class="b-image">
+        <div class="b-image-placeholder">🖼</div>
+      </div>`,
+    props: []
+  },
+  pricing: {
+    name: 'Pricing Table',
+    render: (d) => `
+      <div class="b-pricing">
+        <h2>${d.title||'Simple Pricing'}</h2>
+        <p class="b-pricing-sub">${d.sub||'No hidden fees. Cancel anytime.'}</p>
+        <div class="b-pricing-grid">
+          <div class="b-pricing-card">
+            <div class="b-pricing-plan">Starter</div>
+            <div class="b-pricing-price">$0</div>
+            <div class="b-pricing-period">Forever free</div>
+            <div class="b-pricing-btn">Get Started</div>
+          </div>
+          <div class="b-pricing-card featured">
+            <div class="b-pricing-plan">Pro</div>
+            <div class="b-pricing-price">$29</div>
+            <div class="b-pricing-period">per month</div>
+            <div class="b-pricing-btn">Start Trial</div>
+          </div>
+          <div class="b-pricing-card">
+            <div class="b-pricing-plan">Enterprise</div>
+            <div class="b-pricing-price">$99</div>
+            <div class="b-pricing-period">per month</div>
+            <div class="b-pricing-btn">Contact Sales</div>
+          </div>
+        </div>
+      </div>`,
+    props: [
+      { id:'title', label:'Section Title', type:'text', default:'Simple Pricing' },
+      { id:'sub', label:'Subtitle', type:'text', default:'No hidden fees. Cancel anytime.' },
+    ]
+  },
+  footer: {
+    name: 'Footer',
+    render: (d) => `
+      <footer class="b-footer">
+        <div class="b-footer-inner">
+          <div class="b-footer-logo">${d.logo||'BrandName'}</div>
+          <div class="b-footer-links">
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+            <a href="#">Contact</a>
+          </div>
+          <div class="b-footer-copy">${d.copy||'© 2024 BrandName. All rights reserved.'}</div>
+        </div>
+      </footer>`,
+    props: [
+      { id:'logo', label:'Brand Name', type:'text', default:'BrandName' },
+      { id:'copy', label:'Copyright', type:'text', default:'© 2024 BrandName.' },
+    ]
+  }
+};
+
+// ══════════════════════════════════════════════════════
+// TEMPLATE PRESETS
+// ══════════════════════════════════════════════════════
+const TEMPLATES = {
+  agency: {
+    label: 'Creative Studio',
+    blocks: [
+      { type:'nav', data:{logo:'CreativeStudio', cta:'Work with Us'} },
+      { type:'hero', data:{headline:'We make brands unforgettable.', sub:'Award-winning design studio based in New York.', cta:'See Our Work', bg:'#ff6b2b'} },
+      { type:'features', data:{title:'What We Do', f1:'Brand Identity', f2:'Web Design', f3:'Motion & Film'} },
+      { type:'stats', data:{s1:'12+', l1:'Years Experience', s2:'200+', l2:'Projects Done', s3:'98%', l3:'Client Retention'} },
+      { type:'footer', data:{logo:'CreativeStudio', copy:'© 2024 CreativeStudio.'} }
+    ]
+  },
+  saas: {
+    label: 'Product Launch',
+    blocks: [
+      { type:'nav', data:{logo:'LaunchApp', link1:'Features', link2:'Pricing', link3:'Blog', cta:'Try for free'} },
+      { type:'hero', data:{headline:'Ship products 10× faster.', sub:'The all-in-one platform for modern product teams.', cta:'Start free →', bg:'#060814'} },
+      { type:'stats', data:{s1:'50K+', l1:'Teams', s2:'99.9%', l2:'Uptime', s3:'4.9★', l3:'Rating'} },
+      { type:'features', data:{title:'Built for teams', f1:'Real-time Sync', f2:'AI Powered', f3:'99.9% Uptime'} },
+      { type:'pricing', data:{title:'Pricing that scales'} },
+      { type:'cta', data:{title:'Start building today', btn:'Get started free →'} },
+      { type:'footer', data:{logo:'LaunchApp'} }
+    ]
+  },
+  portfolio: {
+    label: 'Personal Portfolio',
+    blocks: [
+      { type:'nav', data:{logo:'J.Smith', link1:'Work', link2:'About', link3:'Blog', cta:'Hire Me'} },
+      { type:'hero', data:{headline:'Designer & Developer', sub:'I craft beautiful digital experiences for ambitious brands.', cta:'View My Work', bg:'#0d1117'} },
+      { type:'gallery', data:{title:'Selected Work'} },
+      { type:'text', data:{title:'About Me', body:'I\'m a multidisciplinary designer with 8 years of experience working with startups and Fortune 500 companies. Passionate about clean design and seamless user experiences.'} },
+      { type:'testimonial', data:{quote:"Working with J. Smith was a game-changer. Our conversion rate increased by 40% after the redesign.", author:'Alex Rivera', role:'CEO, StartupCo'} },
+      { type:'cta', data:{title:'Let\'s work together', sub:'Open to freelance projects and full-time opportunities.', btn:'Get in touch →'} },
+      { type:'footer', data:{logo:'J.Smith', copy:'© 2024 J.Smith. Crafted with ♥'} }
+    ]
+  }
+};
+
+// ══════════════════════════════════════════════════════
+// BLOCK DATA STORE
+// ══════════════════════════════════════════════════════
+const blockDataStore = {};
+
+// ══════════════════════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════════════════════
+function showToast(msg) {
+  $('#toast-msg').text(msg);
+  $('#toast').addClass('show');
+  setTimeout(() => $('#toast').removeClass('show'), 2000);
+}
+
+function getBlockData(id) {
+  return blockDataStore[id] || {};
+}
+
+function setBlockData(id, key, val) {
+  if (!blockDataStore[id]) blockDataStore[id] = {};
+  blockDataStore[id][key] = val;
+}
+
+// ══════════════════════════════════════════════════════
+// RENDER BLOCK
+// ══════════════════════════════════════════════════════
+function renderBlock(type, data, id) {
+  const def = BLOCK_DEFS[type];
+  if (!def) return '';
+  blockDataStore[id] = Object.assign({}, data);
+
+  return `
+    <div class="canvas-block" data-block-id="${id}" data-block-type="${type}">
+      <div class="block-controls">
+        <button class="block-ctrl-btn move" title="Drag to move">⠿</button>
+        <button class="block-ctrl-btn del" title="Delete" onclick="deleteBlock('${id}')">✕</button>
+      </div>
+      ${def.render(data)}
+    </div>`;
+}
+
+function addBlock(type, data, appendTop) {
+  const id = 'block-' + (++blockCounter);
+  const html = renderBlock(type, data || {}, id);
+  const $zone = $('#canvas-drop-zone');
+
+  $('#canvas-empty-hint').hide();
+
+  if (appendTop) {
+    $zone.prepend(html);
+  } else {
+    $zone.append(html);
+  }
+
+  initSortableBlock($('#canvas-drop-zone').find('[data-block-id="'+id+'"]'));
+  return id;
+}
+
+function deleteBlock(id) {
+  $('[data-block-id="'+id+'"]').remove();
+  delete blockDataStore[id];
+  if (selectedBlock === id) {
+    selectedBlock = null;
+    showPropsEmpty();
+  }
+  if ($('.canvas-block').length === 0) {
+    $('#canvas-empty-hint').show();
+  }
+  showToast('Block removed');
+}
+
+// ══════════════════════════════════════════════════════
+// LOAD TEMPLATE
+// ══════════════════════════════════════════════════════
+function loadTemplate(name) {
+  currentTemplate = name;
+  const tpl = TEMPLATES[name];
+  $('#canvas-drop-zone').empty();
+  $('#canvas-drop-zone').append('<div class="canvas-empty-hint" id="canvas-empty-hint" style="display:none"><div class="hint-icon">⬡</div><strong>Drop blocks here</strong><span>Drag any block from the left panel</span></div>');
+  Object.keys(blockDataStore).forEach(k => delete blockDataStore[k]);
+  blockCounter = 0;
+  selectedBlock = null;
+  showPropsEmpty();
+
+  tpl.blocks.forEach(b => addBlock(b.type, b.data));
+  $('#current-template-label').text(tpl.label);
+
+  initDropZone();
+}
+
+// ══════════════════════════════════════════════════════
+// PROPERTIES PANEL
+// ══════════════════════════════════════════════════════
+function showPropsEmpty() {
+  $('#props-empty').show();
+  $('#props-body').hide();
+  $('#props-actions').hide();
+}
+
+function showPropsForBlock(id) {
+  selectedBlock = id;
+  const type = $('[data-block-id="'+id+'"]').data('block-type');
+  const def = BLOCK_DEFS[type];
+  const data = getBlockData(id);
+
+  if (!def || !def.props.length) {
+    $('#props-empty').show();
+    $('#props-body').hide();
+    $('#props-actions').show();
+    return;
+  }
+
+  let html = '';
+  def.props.forEach(p => {
+    const val = data[p.id] !== undefined ? data[p.id] : p.default;
+    if (p.type === 'color') {
+      html += `<div class="prop-group">
+        <div class="prop-label">${p.label}</div>
+        <input type="color" class="prop-color" data-prop="${p.id}" value="${/^#/.test(val) ? val : '#7c3aed'}">
+      </div>`;
+    } else {
+      html += `<div class="prop-group">
+        <div class="prop-label">${p.label}</div>
+        <input type="text" class="prop-input" data-prop="${p.id}" value="${$('<div>').text(val).html()}">
+      </div>`;
+    }
+  });
+
+  $('#props-empty').hide();
+  $('#props-body').html(html).show();
+  $('#props-actions').show();
+
+  // Live prop update
+  $('#props-body input').on('input change', function() {
+    const prop = $(this).data('prop');
+    const val = $(this).val();
+    setBlockData(selectedBlock, prop, val);
+    refreshBlock(selectedBlock);
+  });
+}
+
+function refreshBlock(id) {
+  const $block = $('[data-block-id="'+id+'"]');
+  const type = $block.data('block-type');
+  const def = BLOCK_DEFS[type];
+  const data = getBlockData(id);
+  const inner = def.render(data);
+  $block.find('.b-nav, .b-hero, .b-features, .b-text, .b-cta, .b-stats, .b-testimonial, .b-gallery, .b-image, .b-pricing, footer').remove();
+  $block.append(inner);
+}
+
+// ══════════════════════════════════════════════════════
+// DRAG & DROP FROM SIDEBAR
+// ══════════════════════════════════════════════════════
+function initDraggableBlocks() {
+  $('.block-item').each(function() {
+    const $item = $(this);
+    const type = $item.data('block');
+
+    $item.draggable({
+      helper: function() {
+        return $(`<div class="ui-draggable-helper">${BLOCK_DEFS[type].name}</div>`);
+      },
+      appendTo: 'body',
+      zIndex: 9999,
+      cursorAt: { top: 15, left: 60 },
+      start: function() {
+        $('#canvas-drop-zone').addClass('drag-active');
+        $('#canvas-empty-hint').addClass('drag-over');
+      },
+      stop: function() {
+        $('#canvas-drop-zone').removeClass('drag-active');
+        $('#canvas-empty-hint').removeClass('drag-over');
+      }
+    });
+  });
+}
+
+function initDropZone() {
+  const $zone = $('#canvas-drop-zone');
+
+  $zone.droppable({
+    accept: '.block-item',
+    hoverClass: 'drag-over',
+    drop: function(event, ui) {
+      const type = ui.draggable.data('block');
+      const id = addBlock(type);
+      showToast(`${BLOCK_DEFS[type].name} added!`);
+      // Select new block
+      $('.canvas-block').removeClass('selected');
+      $('[data-block-id="'+id+'"]').addClass('selected');
+      showPropsForBlock(id);
+    }
+  });
+}
+
+// ══════════════════════════════════════════════════════
+// SORTABLE (reorder blocks)
+// ══════════════════════════════════════════════════════
+function initCanvasSortable() {
+  $('#canvas-drop-zone').sortable({
+    items: '.canvas-block',
+    handle: '.block-ctrl-btn.move',
+    placeholder: 'canvas-placeholder',
+    tolerance: 'pointer',
+    cursor: 'grabbing',
+    axis: 'y',
+    start: function(e, ui) {
+      ui.placeholder.height(ui.item.outerHeight());
+    },
+    update: function() {
+      showToast('Block moved');
+    }
+  });
+}
+
+function initSortableBlock($el) {
+  // Blocks are sortable by re-init
+}
+
+// ══════════════════════════════════════════════════════
+// CATEGORY FILTER
+// ══════════════════════════════════════════════════════
+$('.cat-btn').on('click', function() {
+  $('.cat-btn').removeClass('active');
+  $(this).addClass('active');
+  const cat = $(this).data('cat');
+  if (cat === 'all') {
+    $('.block-item').show();
+  } else {
+    $('.block-item').hide();
+    $(`.block-item[data-cat="${cat}"]`).show();
+  }
+});
+
+// ══════════════════════════════════════════════════════
+// CANVAS BLOCK CLICK → SELECT
+// ══════════════════════════════════════════════════════
+$(document).on('click', '.canvas-block', function(e) {
+  if ($(e.target).hasClass('block-ctrl-btn') || $(e.target).closest('.block-ctrl-btn').length) return;
+  $('.canvas-block').removeClass('selected');
+  $(this).addClass('selected');
+  showPropsForBlock($(this).data('block-id'));
+});
+
+// Click away deselect
+$(document).on('click', function(e) {
+  if (!$(e.target).closest('.canvas-block').length && !$(e.target).closest('.builder-props').length) {
+    $('.canvas-block').removeClass('selected');
+    selectedBlock = null;
+    showPropsEmpty();
+  }
+});
+
+// ══════════════════════════════════════════════════════
+// VIEWPORT SWITCHER
+// ══════════════════════════════════════════════════════
+$('.viewport-btn').on('click', function() {
+  $('.viewport-btn').removeClass('active');
+  $(this).addClass('active');
+  const view = $(this).data('view');
+  $('#builder-canvas').removeClass('tablet mobile').addClass(view === 'desktop' ? '' : view);
+});
+
+// ══════════════════════════════════════════════════════
+// PROPS ACTIONS
+// ══════════════════════════════════════════════════════
+$('#btn-move-up').on('click', function() {
+  if (!selectedBlock) return;
+  const $block = $('[data-block-id="'+selectedBlock+'"]');
+  const $prev = $block.prev('.canvas-block');
+  if ($prev.length) { $block.insertBefore($prev); showToast('Moved up'); }
+});
+
+$('#btn-move-down').on('click', function() {
+  if (!selectedBlock) return;
+  const $block = $('[data-block-id="'+selectedBlock+'"]');
+  const $next = $block.next('.canvas-block');
+  if ($next.length) { $block.insertAfter($next); showToast('Moved down'); }
+});
+
+$('#btn-delete-block').on('click', function() {
+  if (!selectedBlock) return;
+  deleteBlock(selectedBlock);
+});
+
+// ══════════════════════════════════════════════════════
+// TEMPLATE SELECTION
+// ══════════════════════════════════════════════════════
+$('.template-select-btn, .template-card').on('click', function(e) {
+  const tpl = $(this).data('template') || $(this).closest('[data-template]').data('template');
+  if (!tpl) return;
+  loadTemplate(tpl);
+  $('#screen-templates').removeClass('active');
+  $('#screen-builder').addClass('active');
+  initDraggableBlocks();
+  initCanvasSortable();
+  initDropZone();
+});
+
+// ══════════════════════════════════════════════════════
+// BACK TO TEMPLATES
+// ══════════════════════════════════════════════════════
+$('#btn-back-templates').on('click', function() {
+  $('#screen-builder').removeClass('active');
+  $('#screen-templates').addClass('active');
+});
+
+// ══════════════════════════════════════════════════════
+// CLEAR CANVAS
+// ══════════════════════════════════════════════════════
+$('#btn-clear').on('click', function() {
+  if (!confirm('Clear all blocks?')) return;
+  $('#canvas-drop-zone').empty();
+  $('#canvas-drop-zone').append('<div class="canvas-empty-hint" id="canvas-empty-hint"><div class="hint-icon">⬡</div><strong>Drop blocks here</strong><span>Drag any block from the left panel</span></div>');
+  Object.keys(blockDataStore).forEach(k => delete blockDataStore[k]);
+  selectedBlock = null;
+  showPropsEmpty();
+  showToast('Canvas cleared');
+});
+
+// ══════════════════════════════════════════════════════
+// EXPORT HTML
+// ══════════════════════════════════════════════════════
+$('#btn-export').on('click', function() {
+  const canvasHtml = $('#canvas-drop-zone').html();
+
+  // Extract all block contents (remove controls)
+  const $temp = $('<div>').html(canvasHtml);
+  $temp.find('.block-controls').remove();
+  $temp.find('.canvas-block').each(function() {
+    const inner = $(this).html();
+    $(this).replaceWith(inner);
+  });
+  $temp.find('.canvas-empty-hint').remove();
+
+  const exported = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Website</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Instrument Sans',sans-serif;color:#1a1a1a}
+.b-nav{display:flex;align-items:center;padding:16px 32px;background:white;border-bottom:1px solid #f0f0f0;justify-content:space-between}
+.b-nav-logo{font-size:18px;font-weight:800;font-family:'Syne',sans-serif;color:#1a1a1a}
+.b-nav-links{display:flex;gap:24px}.b-nav-links a{font-size:13px;color:#555;text-decoration:none}
+.b-nav-cta{background:#1a1a1a;color:white;padding:8px 20px;border-radius:7px;font-size:13px;font-weight:600;text-decoration:none}
+.b-hero{padding:72px 48px;text-align:center;color:white}
+.b-hero h1{font-size:42px;font-weight:800;font-family:'Syne',sans-serif;margin-bottom:16px;line-height:1.1}
+.b-hero p{font-size:16px;opacity:0.7;max-width:500px;margin:0 auto 28px;line-height:1.6}
+.b-hero-btn{display:inline-block;background:#e8ff47;color:#1a1a2e;padding:14px 32px;border-radius:8px;font-weight:700;font-size:14px;text-decoration:none}
+.b-features{padding:64px 48px;background:#fafafa}
+.b-features h2{text-align:center;font-size:28px;font-weight:800;font-family:'Syne',sans-serif;margin-bottom:8px}
+.b-features-sub{text-align:center;color:#777;font-size:14px;margin-bottom:40px}
+.b-features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.b-feature-card{background:white;border-radius:12px;padding:24px;border:1px solid #eee}
+.b-feature-icon{font-size:24px;margin-bottom:12px}
+.b-feature-title{font-size:15px;font-weight:700;margin-bottom:6px}
+.b-feature-text{font-size:13px;color:#777;line-height:1.5}
+.b-text{padding:40px 48px;background:white}
+.b-text h2{font-size:24px;font-weight:700;font-family:'Syne',sans-serif;margin-bottom:12px}
+.b-text p{font-size:14px;color:#555;line-height:1.7}
+.b-cta{padding:64px 48px;text-align:center;color:white}
+.b-cta h2{font-size:32px;font-weight:800;font-family:'Syne',sans-serif;margin-bottom:12px}
+.b-cta p{font-size:15px;opacity:0.8;margin-bottom:28px}
+.b-cta-btn{display:inline-block;background:white;color:#7c3aed;padding:14px 36px;border-radius:8px;font-weight:700;font-size:14px;text-decoration:none}
+.b-stats{padding:48px;background:#1a1a2e;color:white}
+.b-stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.b-stat{text-align:center}
+.b-stat-num{font-size:40px;font-weight:800;font-family:'Syne',sans-serif;color:#e8ff47}
+.b-stat-label{font-size:13px;opacity:0.6;margin-top:4px}
+.b-testimonial{padding:56px 48px;background:white;text-align:center}
+.b-testimonial blockquote{font-size:20px;font-style:italic;color:#333;line-height:1.5;max-width:560px;margin:0 auto 24px}
+.b-testimonial-author{font-size:13px;font-weight:700}
+.b-testimonial-role{font-size:12px;color:#999}
+.b-gallery{padding:48px;background:#f5f5f5}
+.b-gallery h2{font-size:24px;font-weight:700;font-family:'Syne',sans-serif;margin-bottom:24px}
+.b-gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.b-gallery-item{aspect-ratio:4/3;border-radius:10px}
+.b-footer{padding:40px 48px;background:#0f0f14;color:white}
+.b-footer-inner{display:flex;justify-content:space-between;align-items:center}
+.b-footer-logo{font-size:16px;font-weight:800;font-family:'Syne',sans-serif}
+.b-footer-links{display:flex;gap:20px}
+.b-footer-links a{font-size:12px;color:rgba(255,255,255,0.4);text-decoration:none}
+.b-footer-copy{font-size:12px;color:rgba(255,255,255,0.3)}
+.b-image{padding:32px 48px;background:white}
+.b-image-placeholder{width:100%;height:240px;background:linear-gradient(135deg,#e0e7ff,#f0f9ff);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#999;font-size:32px}
+.b-pricing{padding:64px 48px;background:white}
+.b-pricing h2{text-align:center;font-size:28px;font-weight:800;font-family:'Syne',sans-serif;margin-bottom:8px}
+.b-pricing-sub{text-align:center;color:#777;font-size:14px;margin-bottom:40px}
+.b-pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.b-pricing-card{border:1px solid #eee;border-radius:14px;padding:28px 24px;text-align:center}
+.b-pricing-card.featured{background:#1a1a2e;color:white;border-color:transparent}
+.b-pricing-plan{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#999;margin-bottom:12px}
+.b-pricing-card.featured .b-pricing-plan{color:rgba(255,255,255,0.5)}
+.b-pricing-price{font-size:36px;font-weight:800;font-family:'Syne',sans-serif;color:#1a1a1a}
+.b-pricing-card.featured .b-pricing-price{color:#e8ff47}
+.b-pricing-period{font-size:12px;color:#999;margin-bottom:20px}
+.b-pricing-btn{display:block;padding:10px;border-radius:8px;font-size:13px;font-weight:700;text-align:center;cursor:pointer}
+.b-pricing-card:not(.featured) .b-pricing-btn{background:#f4f4f4;color:#1a1a1a}
+.b-pricing-card.featured .b-pricing-btn{background:#e8ff47;color:#1a1a2e}
+</style>
+</head>
+<body>
+${$temp.html()}
+</body>
+</html>`;
+
+  const blob = new Blob([exported], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'my-website.html';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('HTML exported!');
+});
+
+// ══════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════
+$(function() {
+  // Template card hover effect
+  $('.template-card').on('mouseenter', function() {
+    $(this).find('.template-select-btn').css('background', 'rgba(232,255,71,0.08)');
+  }).on('mouseleave', function() {
+    $(this).find('.template-select-btn').css('background', '');
+  });
+});
+</script>
+</body>
+</html>
