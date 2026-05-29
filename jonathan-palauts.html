@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Jonathan Palauts | Luxury Real Estate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+  :root {
+    --emerald: #1a5c45;
+    --emerald-dark: #0f3d2e;
+    --emerald-mid: #24704f;
+    --emerald-light: #2e8f63;
+    --gold: #c9a84c;
+    --gold-light: #e4c97e;
+    --gold-pale: #f5e9c8;
+    --white: #fdfcf8;
+    --off-white: #f4f1ea;
+    --charcoal: #1a1a1a;
+    --mid-gray: #4a4a4a;
+    --light-gray: #8a8a8a;
+    --border: rgba(201,168,76,0.25);
+    --section-pad: 100px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--white);
+    color: var(--charcoal);
+    font-size: 16px;
+    overflow-x: hidden;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--off-white); }
+  ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 24px 60px;
+    background: rgba(15,61,46,0.96);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    transition: padding 0.35s;
+  }
+  nav.scrolled { padding: 16px 60px; }
+
+  .nav-logo {
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .nav-logo-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 600; letter-spacing: 2px;
+    color: var(--white); text-transform: uppercase;
+  }
+  .nav-logo-tagline {
+    font-size: 10px; letter-spacing: 4px; color: var(--gold);
+    text-transform: uppercase; font-weight: 400;
+  }
+
+  .nav-links {
+    display: flex; gap: 40px; list-style: none;
+  }
+  .nav-links a {
+    font-size: 13px; letter-spacing: 2px; text-transform: uppercase;
+    color: rgba(253,252,248,0.75); text-decoration: none; font-weight: 400;
+    position: relative; transition: color 0.3s;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -4px; left: 0; right: 0;
+    height: 1px; background: var(--gold); transform: scaleX(0);
+    transition: transform 0.3s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a:hover::after { transform: scaleX(1); }
+
+  .nav-cta {
+    padding: 10px 24px;
+    border: 1px solid var(--gold); color: var(--gold);
+    font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+    text-decoration: none; font-family: 'Jost', sans-serif;
+    transition: background 0.3s, color 0.3s;
+  }
+  .nav-cta:hover { background: var(--gold); color: var(--emerald-dark); }
+
+  .hamburger {
+    display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none;
+  }
+  .hamburger span { width: 24px; height: 1px; background: var(--gold); display: block; transition: all 0.3s; }
+
+  /* ── HERO ── */
+  .hero {
+    height: 100vh; min-height: 700px;
+    position: relative; display: flex; align-items: center;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: url('https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1600&q=80') center/cover no-repeat;
+    transform: scale(1.05);
+    animation: heroZoom 12s ease-out forwards;
+  }
+  @keyframes heroZoom { to { transform: scale(1); } }
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(105deg, rgba(10,38,28,0.92) 0%, rgba(15,61,46,0.75) 50%, rgba(10,38,28,0.55) 100%);
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    padding: 0 60px; max-width: 780px;
+    animation: heroFade 1.2s ease 0.3s both;
+  }
+  @keyframes heroFade { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: none; } }
+
+  .hero-eyebrow {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 28px;
+  }
+  .hero-eyebrow-line { width: 48px; height: 1px; background: var(--gold); }
+  .hero-eyebrow-text {
+    font-size: 11px; letter-spacing: 5px; color: var(--gold);
+    text-transform: uppercase; font-weight: 400;
+  }
+
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 76px; font-weight: 300; line-height: 1.05;
+    color: var(--white); margin-bottom: 28px;
+  }
+  .hero h1 em { font-style: italic; color: var(--gold-light); }
+  .hero p {
+    font-size: 17px; color: rgba(253,252,248,0.75);
+    line-height: 1.8; max-width: 500px; margin-bottom: 48px;
+    font-weight: 300;
+  }
+  .hero-btns { display: flex; gap: 20px; flex-wrap: wrap; }
+
+  .btn-primary {
+    padding: 16px 40px;
+    background: var(--gold); color: var(--emerald-dark);
+    font-size: 12px; letter-spacing: 2.5px; text-transform: uppercase;
+    text-decoration: none; font-family: 'Jost', sans-serif; font-weight: 600;
+    transition: background 0.3s, transform 0.2s;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+  .btn-outline {
+    padding: 16px 40px;
+    border: 1px solid rgba(253,252,248,0.4); color: var(--white);
+    font-size: 12px; letter-spacing: 2.5px; text-transform: uppercase;
+    text-decoration: none; font-family: 'Jost', sans-serif; font-weight: 400;
+    transition: border-color 0.3s, color 0.3s;
+    display: inline-block;
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+  .hero-stats {
+    position: absolute; bottom: 60px; right: 60px; z-index: 2;
+    display: flex; gap: 48px;
+    animation: heroFade 1.2s ease 0.7s both;
+  }
+  .stat { text-align: center; }
+  .stat-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 42px; font-weight: 300; color: var(--gold); line-height: 1;
+  }
+  .stat-label {
+    font-size: 10px; letter-spacing: 3px; color: rgba(253,252,248,0.6);
+    text-transform: uppercase; margin-top: 6px;
+  }
+  .stat-divider { width: 1px; background: rgba(201,168,76,0.3); }
+
+  /* ── MARQUEE ── */
+  .marquee-wrap {
+    background: var(--gold); overflow: hidden;
+    padding: 14px 0;
+  }
+  .marquee-track {
+    display: flex; gap: 0; white-space: nowrap;
+    animation: marquee 25s linear infinite;
+  }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .marquee-item {
+    font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--emerald-dark); font-weight: 600;
+    padding: 0 32px; display: inline-flex; align-items: center; gap: 16px;
+  }
+  .marquee-dot { width: 4px; height: 4px; background: var(--emerald-dark); border-radius: 50%; flex-shrink: 0; }
+
+  /* ── SECTION HEADER ── */
+  .section-header { text-align: center; margin-bottom: 64px; }
+  .section-eyebrow {
+    font-size: 11px; letter-spacing: 5px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 16px; display: block;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 52px; font-weight: 300; line-height: 1.1; color: var(--charcoal);
+  }
+  .section-title em { font-style: italic; color: var(--emerald); }
+  .section-rule {
+    width: 60px; height: 1px; background: var(--gold);
+    margin: 24px auto 0;
+  }
+
+  /* ── ABOUT STRIP ── */
+  .about-strip {
+    padding: var(--section-pad) 60px;
+    display: flex; align-items: center; gap: 80px;
+  }
+  .about-img-col { flex: 0 0 45%; position: relative; }
+  .about-img-frame {
+    position: relative;
+    aspect-ratio: 4/5; overflow: hidden;
+  }
+  .about-img-frame img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+  .about-img-frame:hover img { transform: scale(1.04); }
+  .about-img-accent {
+    position: absolute; bottom: -24px; right: -24px;
+    width: 180px; height: 180px;
+    border: 1px solid var(--gold); z-index: -1;
+  }
+  .about-img-badge {
+    position: absolute; top: 24px; left: -24px;
+    background: var(--emerald-dark); padding: 24px;
+    text-align: center; z-index: 2;
+  }
+  .about-img-badge-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 40px; color: var(--gold); font-weight: 300; line-height: 1;
+  }
+  .about-img-badge-text {
+    font-size: 10px; letter-spacing: 2px; color: rgba(253,252,248,0.7);
+    text-transform: uppercase; margin-top: 4px;
+  }
+
+  .about-text-col { flex: 1; }
+  .about-text-col .section-header { text-align: left; margin-bottom: 32px; }
+  .about-text-col .section-rule { margin-left: 0; }
+  .about-text-col p {
+    font-size: 17px; color: var(--mid-gray); line-height: 1.9;
+    font-weight: 300; margin-bottom: 20px;
+  }
+  .about-pillars {
+    display: flex; gap: 32px; margin-top: 36px;
+  }
+  .pillar {
+    flex: 1; padding: 24px; border-top: 2px solid var(--emerald);
+  }
+  .pillar i { color: var(--gold); font-size: 20px; margin-bottom: 12px; display: block; }
+  .pillar-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; color: var(--charcoal); margin-bottom: 8px;
+  }
+  .pillar p { font-size: 14px; color: var(--light-gray); line-height: 1.7; margin: 0; }
+
+  /* ── SERVICES ── */
+  .services { background: var(--emerald-dark); padding: var(--section-pad) 60px; }
+  .services .section-title { color: var(--white); }
+  .services-grid {
+    display: flex; gap: 2px; margin-top: 64px;
+  }
+  .service-card {
+    flex: 1; position: relative; overflow: hidden;
+    aspect-ratio: 3/4; cursor: pointer;
+  }
+  .service-card img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.6s ease;
+    filter: brightness(0.6);
+  }
+  .service-card:hover img { transform: scale(1.08); filter: brightness(0.4); }
+  .service-card-overlay {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 32px;
+    background: linear-gradient(0deg, rgba(10,38,28,0.9) 0%, transparent 60%);
+    transition: background 0.4s;
+  }
+  .service-card:hover .service-card-overlay {
+    background: linear-gradient(0deg, rgba(10,38,28,0.97) 0%, rgba(10,38,28,0.5) 100%);
+  }
+  .service-icon {
+    width: 48px; height: 48px; border: 1px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 16px; opacity: 0; transform: translateY(10px);
+    transition: opacity 0.4s 0.1s, transform 0.4s 0.1s;
+  }
+  .service-card:hover .service-icon { opacity: 1; transform: none; }
+  .service-icon i { color: var(--gold); font-size: 18px; }
+  .service-num {
+    font-size: 11px; letter-spacing: 3px; color: var(--gold);
+    text-transform: uppercase; margin-bottom: 10px;
+  }
+  .service-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px; color: var(--white); font-weight: 400; margin-bottom: 12px;
+  }
+  .service-desc {
+    font-size: 14px; color: rgba(253,252,248,0.7); line-height: 1.7;
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.5s ease, opacity 0.4s;
+    opacity: 0; font-weight: 300;
+  }
+  .service-card:hover .service-desc { max-height: 120px; opacity: 1; }
+
+  /* ── PROPERTIES TEASER ── */
+  .properties { padding: var(--section-pad) 60px; background: var(--off-white); }
+  .properties-grid {
+    display: flex; gap: 28px; margin-top: 64px;
+  }
+  .prop-card {
+    flex: 1; background: var(--white);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .prop-card:hover { transform: translateY(-8px); box-shadow: 0 16px 48px rgba(0,0,0,0.12); }
+  .prop-img { aspect-ratio: 4/3; overflow: hidden; position: relative; }
+  .prop-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+  .prop-card:hover .prop-img img { transform: scale(1.05); }
+  .prop-badge {
+    position: absolute; top: 20px; left: 20px;
+    background: var(--emerald); color: var(--white);
+    font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+    padding: 6px 14px; font-weight: 500;
+  }
+  .prop-body { padding: 28px; }
+  .prop-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; color: var(--emerald); font-weight: 400;
+    margin-bottom: 6px;
+  }
+  .prop-name {
+    font-size: 18px; color: var(--charcoal);
+    font-weight: 500; margin-bottom: 4px;
+  }
+  .prop-location {
+    font-size: 13px; color: var(--light-gray);
+    display: flex; align-items: center; gap: 6px; margin-bottom: 20px;
+  }
+  .prop-location i { color: var(--gold); font-size: 12px; }
+  .prop-specs {
+    display: flex; gap: 20px; border-top: 1px solid var(--off-white);
+    padding-top: 20px;
+  }
+  .prop-spec {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: var(--mid-gray);
+  }
+  .prop-spec i { color: var(--emerald); font-size: 12px; }
+
+  /* ── TESTIMONIALS ── */
+  .testimonials {
+    padding: var(--section-pad) 60px;
+    background: var(--emerald-dark);
+    position: relative; overflow: hidden;
+  }
+  .testimonials::before {
+    content: '\201C';
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 400px; color: rgba(201,168,76,0.06);
+    position: absolute; top: -60px; left: 40px; line-height: 1;
+    pointer-events: none;
+  }
+  .testimonials .section-title { color: var(--white); }
+  .testi-grid { display: flex; gap: 32px; margin-top: 64px; }
+  .testi-card {
+    flex: 1; padding: 40px;
+    border: 1px solid rgba(201,168,76,0.2);
+    position: relative;
+  }
+  .testi-card::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 3px; height: 0; background: var(--gold);
+    transition: height 0.4s;
+  }
+  .testi-card:hover::before { height: 100%; }
+  .testi-stars { color: var(--gold); margin-bottom: 20px; font-size: 13px; letter-spacing: 2px; }
+  .testi-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; color: var(--white); line-height: 1.7;
+    font-style: italic; margin-bottom: 28px; font-weight: 300;
+  }
+  .testi-author {
+    display: flex; align-items: center; gap: 16px;
+  }
+  .testi-avatar {
+    width: 48px; height: 48px; border-radius: 50%;
+    border: 1px solid var(--gold); overflow: hidden; flex-shrink: 0;
+  }
+  .testi-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .testi-name { font-size: 15px; color: var(--white); font-weight: 500; }
+  .testi-role { font-size: 12px; color: var(--gold); letter-spacing: 1px; margin-top: 2px; }
+
+  /* ── CTA ── */
+  .cta {
+    padding: 120px 60px;
+    background: url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1600&q=80') center/cover no-repeat;
+    position: relative; text-align: center;
+  }
+  .cta::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(10,38,28,0.93), rgba(26,92,69,0.88));
+  }
+  .cta-inner { position: relative; z-index: 2; max-width: 680px; margin: 0 auto; }
+  .cta h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 62px; color: var(--white); font-weight: 300; line-height: 1.1;
+    margin-bottom: 24px;
+  }
+  .cta h2 em { font-style: italic; color: var(--gold-light); }
+  .cta p {
+    font-size: 17px; color: rgba(253,252,248,0.75);
+    line-height: 1.8; margin-bottom: 48px; font-weight: 300;
+  }
+  .cta-btns { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+
+  /* ── CONTACT ── */
+  .contact { padding: var(--section-pad) 60px; background: var(--white); }
+  .contact-inner { display: flex; gap: 80px; }
+  .contact-left { flex: 1; }
+  .contact-left .section-header { text-align: left; }
+  .contact-left .section-rule { margin-left: 0; }
+  .contact-info { margin-top: 40px; display: flex; flex-direction: column; gap: 28px; }
+  .contact-item { display: flex; gap: 20px; align-items: flex-start; }
+  .contact-icon {
+    width: 48px; height: 48px; background: var(--emerald-dark);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .contact-icon i { color: var(--gold); font-size: 18px; }
+  .contact-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); }
+  .contact-value { font-size: 16px; color: var(--charcoal); margin-top: 4px; font-weight: 400; }
+
+  .contact-right { flex: 0 0 480px; }
+  .contact-form { display: flex; flex-direction: column; gap: 20px; }
+  .form-row { display: flex; gap: 20px; }
+  .form-group { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+  .form-group label {
+    font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--mid-gray); font-weight: 500;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 14px 18px;
+    border: 1px solid #ddd; background: var(--off-white);
+    font-family: 'Jost', sans-serif; font-size: 15px; color: var(--charcoal);
+    outline: none; transition: border-color 0.3s, background 0.3s;
+    resize: none;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--emerald); background: var(--white);
+  }
+  .form-group textarea { min-height: 130px; }
+  .btn-submit {
+    padding: 16px 40px; background: var(--emerald-dark); color: var(--gold);
+    font-size: 12px; letter-spacing: 2.5px; text-transform: uppercase;
+    font-family: 'Jost', sans-serif; font-weight: 600; border: none;
+    cursor: pointer; transition: background 0.3s, transform 0.2s;
+    align-self: flex-start;
+  }
+  .btn-submit:hover { background: var(--emerald); transform: translateY(-2px); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--charcoal); padding: 64px 60px 32px;
+  }
+  .footer-top { display: flex; gap: 60px; padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .footer-brand { flex: 0 0 280px; }
+  .footer-logo-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px; color: var(--white); letter-spacing: 2px; text-transform: uppercase;
+  }
+  .footer-logo-tag { font-size: 10px; letter-spacing: 4px; color: var(--gold); text-transform: uppercase; margin-top: 4px; }
+  .footer-brand p {
+    font-size: 14px; color: rgba(255,255,255,0.45); line-height: 1.8;
+    margin-top: 20px; font-weight: 300;
+  }
+  .footer-socials { display: flex; gap: 14px; margin-top: 28px; }
+  .footer-social {
+    width: 36px; height: 36px; border: 1px solid rgba(201,168,76,0.35);
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(201,168,76,0.7); font-size: 14px; text-decoration: none;
+    transition: background 0.3s, color 0.3s, border-color 0.3s;
+  }
+  .footer-social:hover { background: var(--gold); color: var(--charcoal); border-color: var(--gold); }
+
+  .footer-col h4 {
+    font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 24px; font-weight: 500;
+  }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .footer-col ul a {
+    font-size: 14px; color: rgba(255,255,255,0.45); text-decoration: none;
+    transition: color 0.3s; font-weight: 300;
+  }
+  .footer-col ul a:hover { color: var(--gold); }
+  .footer-col ul li { font-size: 14px; color: rgba(255,255,255,0.45); font-weight: 300; }
+
+  .footer-bottom {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-top: 28px;
+  }
+  .footer-copy { font-size: 12px; color: rgba(255,255,255,0.3); letter-spacing: 1px; }
+  .footer-legal { display: flex; gap: 24px; }
+  .footer-legal a { font-size: 12px; color: rgba(255,255,255,0.3); text-decoration: none; transition: color 0.3s; }
+  .footer-legal a:hover { color: var(--gold); }
+
+  /* ── PAGE SECTIONS (nav target) ── */
+  section[id] { scroll-margin-top: 88px; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1024px) {
+    nav { padding: 20px 32px; }
+    .hero-content { padding: 0 32px; }
+    .hero h1 { font-size: 56px; }
+    .hero-stats { right: 32px; gap: 28px; }
+    .stat-number { font-size: 32px; }
+    .about-strip { padding: var(--section-pad) 32px; gap: 48px; }
+    .services { padding: var(--section-pad) 32px; }
+    .services-grid { flex-wrap: wrap; }
+    .service-card { flex: 0 0 calc(50% - 1px); }
+    .properties { padding: var(--section-pad) 32px; }
+    .properties-grid { flex-wrap: wrap; }
+    .prop-card { flex: 0 0 calc(50% - 14px); }
+    .testimonials { padding: var(--section-pad) 32px; }
+    .cta { padding: 80px 32px; }
+    .contact { padding: var(--section-pad) 32px; }
+    .contact-inner { flex-direction: column; gap: 48px; }
+    .contact-right { flex: none; }
+    footer { padding: 48px 32px 24px; }
+    .footer-top { flex-wrap: wrap; gap: 32px; }
+    .footer-brand { flex: 0 0 100%; }
+  }
+
+  @media (max-width: 768px) {
+    .nav-links, .nav-cta { display: none; }
+    .hamburger { display: flex; }
+    nav { padding: 18px 24px; }
+    .hero-content { padding: 0 24px; }
+    .hero h1 { font-size: 40px; }
+    .hero-stats { display: none; }
+    .about-strip { flex-direction: column; padding: 64px 24px; }
+    .about-img-col { flex: none; width: 100%; }
+    .about-img-accent { display: none; }
+    .about-img-badge { left: 16px; top: 16px; }
+    .about-pillars { flex-direction: column; gap: 16px; }
+    .services { padding: 64px 24px; }
+    .services-grid { flex-direction: column; gap: 2px; }
+    .service-card { flex: none; aspect-ratio: 16/9; }
+    .section-title { font-size: 36px; }
+    .properties { padding: 64px 24px; }
+    .properties-grid { flex-direction: column; }
+    .prop-card { flex: none; }
+    .testi-grid { flex-direction: column; }
+    .testimonials { padding: 64px 24px; }
+    .cta { padding: 64px 24px; }
+    .cta h2 { font-size: 40px; }
+    .contact { padding: 64px 24px; }
+    .form-row { flex-direction: column; }
+    footer { padding: 48px 24px 24px; }
+    .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+    .footer-col { flex: 0 0 calc(50% - 16px); }
+  }
+
+  /* ── MOBILE NAV ── */
+  .mobile-nav {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: var(--emerald-dark); z-index: 2000;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 40px; transform: translateX(-100%); transition: transform 0.4s cubic-bezier(.77,0,.18,1);
+  }
+  .mobile-nav.open { transform: none; }
+  .mobile-nav a {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px; color: var(--white); text-decoration: none;
+    letter-spacing: 2px; transition: color 0.3s;
+  }
+  .mobile-nav a:hover { color: var(--gold); }
+  .mobile-close {
+    position: absolute; top: 24px; right: 24px;
+    background: none; border: none; color: var(--gold); font-size: 24px; cursor: pointer;
+  }
+
+  /* ── FADE-IN ── */
+  .fade-in { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .fade-in.visible { opacity: 1; transform: none; }
+</style>
+</head>
+<body>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-close" onclick="closeMobileNav()"><i class="fas fa-times"></i></button>
+  <a href="#home" onclick="closeMobileNav()">Home</a>
+  <a href="#about" onclick="closeMobileNav()">About</a>
+  <a href="#services" onclick="closeMobileNav()">Services</a>
+  <a href="#properties" onclick="closeMobileNav()">Properties</a>
+  <a href="#contact" onclick="closeMobileNav()">Contact</a>
+</div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-logo">
+    <div class="nav-logo-name">Jonathan Palauts</div>
+    <div class="nav-logo-tagline">Luxury Real Estate</div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#properties">Properties</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Book a Consultation</a>
+  <button class="hamburger" onclick="openMobileNav()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section id="home" class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <div class="hero-eyebrow-line"></div>
+      <span class="hero-eyebrow-text">Premier Luxury Real Estate</span>
+    </div>
+    <h1>Find Your <em>Perfect</em><br>Dream Property</h1>
+    <p>Jonathan Palauts offers bespoke real estate services for discerning clients seeking exceptional homes, investments, and estates across the most coveted locations.</p>
+    <div class="hero-btns">
+      <a href="#properties" class="btn-primary">Explore Properties</a>
+      <a href="#contact" class="btn-outline">Book a Consultation</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-number">18+</div>
+      <div class="stat-label">Years Experience</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat">
+      <div class="stat-number">850</div>
+      <div class="stat-label">Properties Sold</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat">
+      <div class="stat-number">₱2B+</div>
+      <div class="stat-label">Total Transactions</div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item"><span class="marquee-dot"></span>Luxury Residences</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Premium Investments</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Bespoke Service</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Prime Locations</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Trusted Expertise</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Exclusive Listings</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Luxury Residences</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Premium Investments</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Bespoke Service</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Prime Locations</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Trusted Expertise</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Exclusive Listings</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about" class="about-strip">
+  <div class="about-img-col fade-in">
+    <div class="about-img-frame">
+      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80" alt="Luxury home interior"/>
+    </div>
+    <div class="about-img-accent"></div>
+    <div class="about-img-badge">
+      <div class="about-img-badge-num">18</div>
+      <div class="about-img-badge-text">Years of<br>Excellence</div>
+    </div>
+  </div>
+  <div class="about-text-col fade-in">
+    <div class="section-header">
+      <span class="section-eyebrow">About Jonathan Palauts</span>
+      <h2 class="section-title">A Name Synonymous<br>with <em>Excellence</em></h2>
+      <div class="section-rule"></div>
+    </div>
+    <p>With over 18 years of distinguished expertise in the luxury real estate market, Jonathan Palauts has established himself as one of the most trusted and accomplished property advisors in the Philippines.</p>
+    <p>His philosophy is simple: every client deserves not just a property, but a home that reflects their vision, lifestyle, and aspirations. Through meticulous attention to detail and an unmatched network of connections, Jonathan delivers results that consistently exceed expectations.</p>
+    <div class="about-pillars">
+      <div class="pillar">
+        <i class="fas fa-medal"></i>
+        <div class="pillar-title">Award-Winning</div>
+        <p>Recognized by PRC and industry associations for consistent excellence.</p>
+      </div>
+      <div class="pillar">
+        <i class="fas fa-handshake"></i>
+        <div class="pillar-title">Client-First</div>
+        <p>Every decision is guided by what truly serves your best interest.</p>
+      </div>
+      <div class="pillar">
+        <i class="fas fa-map-marked-alt"></i>
+        <div class="pillar-title">Local Mastery</div>
+        <p>Deep knowledge of Metro Manila's most sought-after neighborhoods.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" class="services">
+  <div class="section-header fade-in">
+    <span class="section-eyebrow">What We Offer</span>
+    <h2 class="section-title" style="color:var(--white)">Premium <em style="color:var(--gold-light)">Services</em><br>Tailored for You</h2>
+    <div class="section-rule"></div>
+  </div>
+  <div class="services-grid fade-in">
+    <div class="service-card">
+      <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80" alt="Luxury Home Sales"/>
+      <div class="service-card-overlay">
+        <div class="service-icon"><i class="fas fa-home"></i></div>
+        <div class="service-num">01</div>
+        <div class="service-name">Luxury Home Sales</div>
+        <div class="service-desc">Curated listings of premium residences, from executive condominiums to sprawling private estates in Metro Manila's most prestigious enclaves.</div>
+      </div>
+    </div>
+    <div class="service-card">
+      <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80" alt="Property Investment"/>
+      <div class="service-card-overlay">
+        <div class="service-icon"><i class="fas fa-chart-line"></i></div>
+        <div class="service-num">02</div>
+        <div class="service-name">Property Investment</div>
+        <div class="service-desc">Strategic investment advisory services to help you grow your portfolio with properties that deliver exceptional long-term value and returns.</div>
+      </div>
+    </div>
+    <div class="service-card">
+      <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80" alt="Commercial Real Estate"/>
+      <div class="service-card-overlay">
+        <div class="service-icon"><i class="fas fa-building"></i></div>
+        <div class="service-num">03</div>
+        <div class="service-name">Commercial Real Estate</div>
+        <div class="service-desc">Expert guidance in acquiring, leasing, or selling commercial properties including office spaces, retail establishments, and mixed-use developments.</div>
+      </div>
+    </div>
+    <div class="service-card">
+      <img src="https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=800&q=80" alt="Property Management"/>
+      <div class="service-card-overlay">
+        <div class="service-icon"><i class="fas fa-key"></i></div>
+        <div class="service-num">04</div>
+        <div class="service-name">Property Management</div>
+        <div class="service-desc">Comprehensive management solutions ensuring your investment property is maintained, tenanted, and performing to its highest potential at all times.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROPERTIES -->
+<section id="properties" class="properties">
+  <div class="section-header fade-in">
+    <span class="section-eyebrow">Featured Listings</span>
+    <h2 class="section-title">Exceptional <em>Properties</em></h2>
+    <div class="section-rule"></div>
+  </div>
+  <div class="properties-grid fade-in">
+    <div class="prop-card">
+      <div class="prop-img">
+        <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=700&q=80" alt="BGC Penthouse"/>
+        <div class="prop-badge">For Sale</div>
+      </div>
+      <div class="prop-body">
+        <div class="prop-price">₱38,500,000</div>
+        <div class="prop-name">Sky Penthouse at One BGC</div>
+        <div class="prop-location"><i class="fas fa-map-marker-alt"></i> Bonifacio Global City, Taguig</div>
+        <div class="prop-specs">
+          <div class="prop-spec"><i class="fas fa-bed"></i> 4 Beds</div>
+          <div class="prop-spec"><i class="fas fa-bath"></i> 3 Baths</div>
+          <div class="prop-spec"><i class="fas fa-ruler-combined"></i> 320 sqm</div>
+        </div>
+      </div>
+    </div>
+    <div class="prop-card">
+      <div class="prop-img">
+        <img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=700&q=80" alt="Alabang Villa"/>
+        <div class="prop-badge">For Sale</div>
+      </div>
+      <div class="prop-body">
+        <div class="prop-price">₱65,000,000</div>
+        <div class="prop-name">Alabang Grand Villa</div>
+        <div class="prop-location"><i class="fas fa-map-marker-alt"></i> Ayala Alabang Village, Muntinlupa</div>
+        <div class="prop-specs">
+          <div class="prop-spec"><i class="fas fa-bed"></i> 6 Beds</div>
+          <div class="prop-spec"><i class="fas fa-bath"></i> 5 Baths</div>
+          <div class="prop-spec"><i class="fas fa-ruler-combined"></i> 750 sqm</div>
+        </div>
+      </div>
+    </div>
+    <div class="prop-card">
+      <div class="prop-img">
+        <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=700&q=80" alt="Makati Unit"/>
+        <div class="prop-badge" style="background:var(--gold);color:var(--emerald-dark)">For Lease</div>
+      </div>
+      <div class="prop-body">
+        <div class="prop-price">₱250,000 / mo</div>
+        <div class="prop-name">Park Central Residences</div>
+        <div class="prop-location"><i class="fas fa-map-marker-alt"></i> Ayala Avenue, Makati City</div>
+        <div class="prop-specs">
+          <div class="prop-spec"><i class="fas fa-bed"></i> 3 Beds</div>
+          <div class="prop-spec"><i class="fas fa-bath"></i> 2 Baths</div>
+          <div class="prop-spec"><i class="fas fa-ruler-combined"></i> 210 sqm</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:48px;" class="fade-in">
+    <a href="#contact" class="btn-primary">Inquire About Listings</a>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="section-header fade-in">
+    <span class="section-eyebrow">Client Stories</span>
+    <h2 class="section-title" style="color:var(--white)">What Our <em style="color:var(--gold-light)">Clients</em> Say</h2>
+    <div class="section-rule"></div>
+  </div>
+  <div class="testi-grid fade-in">
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-text">"Jonathan's expertise and market insight helped us find an extraordinary property in BGC that checked every box on our list. His patience and dedication throughout the process were truly remarkable."</div>
+      <div class="testi-author">
+        <div class="testi-avatar"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80" alt="Client"/></div>
+        <div>
+          <div class="testi-name">Marco Reyes</div>
+          <div class="testi-role">CEO, Reyes Holdings</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-text">"We were searching for an investment property for over a year until Jonathan took on our case. Within three months, we had secured a premium commercial unit with outstanding ROI potential."</div>
+      <div class="testi-author">
+        <div class="testi-avatar"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80" alt="Client"/></div>
+        <div>
+          <div class="testi-name">Sofia Delgado</div>
+          <div class="testi-role">Director, Delgado Group</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-text">"From negotiation to closing, Jonathan handled every detail with professionalism and grace. He secured us a deal we didn't think was possible. Our Alabang estate is everything we dreamed of."</div>
+      <div class="testi-author">
+        <div class="testi-avatar"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80" alt="Client"/></div>
+        <div>
+          <div class="testi-name">Rafael Santos</div>
+          <div class="testi-role">Entrepreneur & Investor</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="cta-inner fade-in">
+    <h2>Ready to Find Your<br><em>Dream Property?</em></h2>
+    <p>Let Jonathan Palauts guide you through every step of your real estate journey — from the first viewing to the final handover. Your perfect property awaits.</p>
+    <div class="cta-btns">
+      <a href="#contact" class="btn-primary">Schedule a Consultation</a>
+      <a href="tel:+639001234567" class="btn-outline"><i class="fas fa-phone" style="margin-right:10px"></i>Call Now</a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact">
+  <div class="contact-inner">
+    <div class="contact-left fade-in">
+      <div class="section-header">
+        <span class="section-eyebrow">Get in Touch</span>
+        <h2 class="section-title">Let's Start Your<br><em>Journey</em></h2>
+        <div class="section-rule"></div>
+      </div>
+      <div class="contact-info">
+        <div class="contact-item">
+          <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+          <div>
+            <div class="contact-label">Office Address</div>
+            <div class="contact-value">The Podium West Tower, Ortigas Center<br>Mandaluyong City, Metro Manila</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon"><i class="fas fa-phone"></i></div>
+          <div>
+            <div class="contact-label">Phone Number</div>
+            <div class="contact-value">+63 (900) 123-4567</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+          <div>
+            <div class="contact-label">Email Address</div>
+            <div class="contact-value">jonathan@palauts.com.ph</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon"><i class="fas fa-clock"></i></div>
+          <div>
+            <div class="contact-label">Office Hours</div>
+            <div class="contact-value">Monday – Saturday: 9:00 AM – 6:00 PM</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="contact-right fade-in">
+      <div class="contact-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" placeholder="Juan"/>
+          </div>
+          <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" placeholder="Dela Cruz"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" placeholder="juan@example.com"/>
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" placeholder="+63 9XX XXX XXXX"/>
+        </div>
+        <div class="form-group">
+          <label>Interested In</label>
+          <select>
+            <option value="">Select a service…</option>
+            <option>Buying a Property</option>
+            <option>Selling a Property</option>
+            <option>Leasing / Rental</option>
+            <option>Property Investment</option>
+            <option>Commercial Real Estate</option>
+            <option>Property Management</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea placeholder="Tell us about your property goals…"></textarea>
+        </div>
+        <button class="btn-submit">Send Inquiry <i class="fas fa-arrow-right" style="margin-left:10px"></i></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="footer-logo-name">Jonathan Palauts</div>
+      <div class="footer-logo-tag">Luxury Real Estate</div>
+      <p>Delivering exceptional real estate experiences with integrity, expertise, and a commitment to achieving your property goals.</p>
+      <div class="footer-socials">
+        <a href="#" class="footer-social"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="footer-social"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="footer-social"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#" class="footer-social"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Navigation</h4>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#properties">Properties</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#services">Luxury Home Sales</a></li>
+        <li><a href="#services">Property Investment</a></li>
+        <li><a href="#services">Commercial Real Estate</a></li>
+        <li><a href="#services">Property Management</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li>The Podium West Tower</li>
+        <li>Ortigas Center, Mandaluyong</li>
+        <li>+63 (900) 123-4567</li>
+        <li>jonathan@palauts.com.ph</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 Jonathan Palauts Luxury Real Estate. All rights reserved.</div>
+    <div class="footer-legal">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">PRC License</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Navbar scroll
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Mobile nav
+  function openMobileNav() { document.getElementById('mobileNav').classList.add('open'); }
+  function closeMobileNav() { document.getElementById('mobileNav').classList.remove('open'); }
+
+  // Fade-in on scroll
+  const fadeEls = document.querySelectorAll('.fade-in');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  fadeEls.forEach(el => observer.observe(el));
+
+  // Form submit
+  document.querySelector('.btn-submit').addEventListener('click', function() {
+    this.textContent = 'Inquiry Sent! ✓';
+    this.style.background = 'var(--emerald-light)';
+    setTimeout(() => {
+      this.innerHTML = 'Send Inquiry <i class="fas fa-arrow-right" style="margin-left:10px"></i>';
+      this.style.background = '';
+    }, 3000);
+  });
+</script>
+</body>
+</html>
