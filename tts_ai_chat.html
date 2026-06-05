@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MedAssist Voice Agent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:#f0f4f8;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.agent-card{background:#fff;border-radius:20px;overflow:hidden;width:100%;max-width:480px;box-shadow:0 8px 40px rgba(24,95,165,0.12)}
+.agent-header{background:linear-gradient(135deg,#0C447C,#185FA5);padding:28px 24px 20px;text-align:center;color:#fff}
+.agent-orb{width:76px;height:76px;border-radius:50%;background:rgba(255,255,255,0.15);border:2px solid rgba(255,255,255,0.3);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;transition:all 0.3s}
+.agent-orb.listening{background:rgba(255,255,255,0.25);box-shadow:0 0 0 10px rgba(255,255,255,0.08),0 0 0 20px rgba(255,255,255,0.04);animation:pulse 1.5s infinite}
+.agent-orb.speaking{background:rgba(56,189,248,0.3);box-shadow:0 0 0 10px rgba(56,189,248,0.12);animation:pulse 0.9s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+.agent-title{font-size:18px;font-weight:600;letter-spacing:0.3px}
+.agent-subtitle{font-size:13px;opacity:0.75;margin-top:3px}
+.status-bar{display:flex;align-items:center;gap:8px;justify-content:center;margin-top:12px;font-size:12px;opacity:0.85}
+.status-dot{width:7px;height:7px;border-radius:50%;background:#4ade80}
+.status-dot.active{animation:blink 1s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.wave-bars{display:flex;align-items:center;gap:3px;height:24px}
+.wave-bars span{width:3px;border-radius:2px;background:rgba(255,255,255,0.75);animation:wave 0.8s infinite}
+.wave-bars span:nth-child(1){height:8px;animation-delay:0s}
+.wave-bars span:nth-child(2){height:16px;animation-delay:0.1s}
+.wave-bars span:nth-child(3){height:22px;animation-delay:0.2s}
+.wave-bars span:nth-child(4){height:16px;animation-delay:0.3s}
+.wave-bars span:nth-child(5){height:8px;animation-delay:0.4s}
+@keyframes wave{0%,100%{transform:scaleY(1)}50%{transform:scaleY(0.45)}}
+.info-chips{display:none;gap:6px;flex-wrap:wrap;padding:12px 16px 4px}
+.chip{font-size:12px;padding:4px 10px;border-radius:12px;border:1px solid #e2e8f0;color:#64748b;background:#f8fafc;display:flex;align-items:center;gap:5px}
+.chip i{font-size:13px}
+.chat-area{padding:16px;height:280px;overflow-y:auto;display:flex;flex-direction:column;gap:10px}
+.bubble{max-width:82%;padding:10px 14px;border-radius:14px;font-size:14px;line-height:1.6}
+.bubble.agent{background:#f1f5f9;color:#1e293b;border-bottom-left-radius:4px;align-self:flex-start}
+.bubble.user{background:#185FA5;color:#fff;border-bottom-right-radius:4px;align-self:flex-end}
+.typing-dots{display:flex;gap:4px;align-items:center;padding:2px 0}
+.typing-dots span{width:6px;height:6px;border-radius:50%;background:#94a3b8;animation:dot 1.2s infinite}
+.typing-dots span:nth-child(2){animation-delay:0.2s}
+.typing-dots span:nth-child(3){animation-delay:0.4s}
+@keyframes dot{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+.choices{display:flex;flex-wrap:wrap;gap:7px;padding:0 16px 12px}
+.choice-btn{border:1px solid #cbd5e1;background:#fff;color:#1e293b;border-radius:20px;padding:7px 14px;font-size:13px;cursor:pointer;transition:all 0.18s;font-family:'DM Sans',sans-serif}
+.choice-btn:hover{background:#eff6ff;border-color:#185FA5;color:#185FA5}
+.controls{padding:14px 16px;border-top:1px solid #f1f5f9;display:flex;align-items:center;gap:10px}
+.mic-btn{width:46px;height:46px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;transition:all 0.2s;flex-shrink:0}
+.mic-btn.idle{background:#f1f5f9;color:#64748b}
+.mic-btn.idle:hover{background:#e2e8f0}
+.mic-btn.recording{background:#dc2626;color:#fff;animation:pulse 1s infinite}
+.input-row{flex:1;display:flex;gap:8px}
+.text-input{flex:1;border:1px solid #e2e8f0;border-radius:22px;padding:10px 16px;font-size:14px;font-family:'DM Sans',sans-serif;background:#f8fafc;color:#1e293b;outline:none}
+.text-input:focus{border-color:#185FA5;background:#fff}
+.send-btn{width:40px;height:40px;border-radius:50%;border:none;background:#185FA5;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;transition:opacity 0.2s;align-self:center}
+.send-btn:hover{opacity:0.85}
+</style>
+</head>
+<body>
+<div class="agent-card">
+  <div class="agent-header">
+    <div class="agent-orb" id="orb">
+      <div class="wave-bars" id="wave" style="display:none">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <i class="ti ti-stethoscope" id="orb-icon" style="font-size:30px;color:#fff"></i>
+    </div>
+    <div class="agent-title">MedAssist Voice Agent</div>
+    <div class="agent-subtitle">Appointment Booking &middot; Healthcare</div>
+    <div class="status-bar">
+      <div class="status-dot active" id="status-dot"></div>
+      <span id="status-text">Online &middot; Ready</span>
+    </div>
+  </div>
+
+  <div class="info-chips" id="info-chips">
+    <div class="chip"><i class="ti ti-user"></i><span id="chip-name">—</span></div>
+    <div class="chip"><i class="ti ti-calendar"></i><span id="chip-date">—</span></div>
+    <div class="chip"><i class="ti ti-building-hospital"></i><span id="chip-dept">—</span></div>
+  </div>
+
+  <div class="chat-area" id="chat-area"></div>
+  <div class="choices" id="choices"></div>
+
+  <div class="controls">
+    <button class="mic-btn idle" id="mic-btn" onclick="toggleMic()" title="Toggle microphone">
+      <i class="ti ti-microphone"></i>
+    </button>
+    <div class="input-row">
+      <input class="text-input" id="text-input" placeholder="Type or use the suggestions above…" onkeydown="if(event.key==='Enter')sendText()"/>
+      <button class="send-btn" onclick="sendText()"><i class="ti ti-arrow-up"></i></button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SYSTEM = `You are MedAssist, a professional and formal AI voice agent for a healthcare clinic. Your sole purpose is appointment booking. You speak in a calm, concise, professional manner. You always:
+1. Greet the caller and ask for their full name
+2. Ask what type of appointment or department they need (General Practice, Cardiology, Dermatology, Orthopedics, Pediatrics, Neurology)
+3. Ask for their preferred date (weekday this week or next week)
+4. Confirm morning or afternoon preference
+5. Confirm the appointment details clearly and summarize all collected information
+6. End with a warm professional closing
+
+Keep responses SHORT (2-3 sentences max). Never use bullet points or markdown. Never break character. Plain conversational text only.`;
+
+let history = [];
+let collecting = {name:null,dept:null,date:null,time:null};
+let micActive = false;
+let synth = window.speechSynthesis;
+let recognition = null;
+let agentBusy = false;
+
+function setStatus(txt, dotActive){
+  document.getElementById('status-text').textContent = txt;
+  document.getElementById('status-dot').classList.toggle('active', dotActive);
+}
+function setOrb(state){
+  const orb = document.getElementById('orb');
+  const wave = document.getElementById('wave');
+  const icon = document.getElementById('orb-icon');
+  orb.className = 'agent-orb ' + state;
+  if(state === 'speaking' || state === 'listening'){
+    wave.style.display = 'flex';
+    icon.style.display = 'none';
+  } else {
+    wave.style.display = 'none';
+    icon.style.display = 'block';
+  }
+}
+function addBubble(text, who){
+  const area = document.getElementById('chat-area');
+  const div = document.createElement('div');
+  div.className = 'bubble ' + who;
+  div.textContent = text;
+  area.appendChild(div);
+  area.scrollTop = area.scrollHeight;
+}
+function showTyping(){
+  const area = document.getElementById('chat-area');
+  const div = document.createElement('div');
+  div.className = 'bubble agent';
+  div.id = 'typing-indicator';
+  div.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+  area.appendChild(div);
+  area.scrollTop = area.scrollHeight;
+}
+function removeTyping(){
+  const t = document.getElementById('typing-indicator');
+  if(t) t.remove();
+}
+function setChoices(options){
+  const c = document.getElementById('choices');
+  c.innerHTML = '';
+  options.forEach(o => {
+    const b = document.createElement('button');
+    b.className = 'choice-btn';
+    b.textContent = o;
+    b.onclick = () => userSay(o);
+    c.appendChild(b);
+  });
+}
+function updateChips(){
+  const chips = document.getElementById('info-chips');
+  const hasData = collecting.name || collecting.dept || collecting.date;
+  chips.style.display = hasData ? 'flex' : 'none';
+  document.getElementById('chip-name').textContent = collecting.name || '—';
+  document.getElementById('chip-date').textContent = (collecting.date && collecting.time)
+    ? collecting.date + ', ' + collecting.time : collecting.date || '—';
+  document.getElementById('chip-dept').textContent = collecting.dept || '—';
+}
+function extractInfo(text){
+  const depts = ['general practice','cardiology','dermatology','orthopedics','pediatrics','neurology'];
+  depts.forEach(d => { if(text.toLowerCase().includes(d)) collecting.dept = d.charAt(0).toUpperCase()+d.slice(1); });
+  const days = ['monday','tuesday','wednesday','thursday','friday'];
+  days.forEach(d => { if(text.toLowerCase().includes(d)) collecting.date = d.charAt(0).toUpperCase()+d.slice(1); });
+  if(text.toLowerCase().includes('morning')) collecting.time = 'Morning';
+  if(text.toLowerCase().includes('afternoon')) collecting.time = 'Afternoon';
+  const nameMatch = text.match(/(?:my name is|i'm|i am)\s+([A-Z][a-z]+(?:\s[A-Z][a-z]+)?)/i);
+  if(nameMatch) collecting.name = nameMatch[1];
+  updateChips();
+}
+function guessChoices(reply){
+  const r = reply.toLowerCase();
+  if(r.includes('name')) return ['John Smith','Maria Santos','Carlos Reyes','Ana Garcia'];
+  if(r.includes('department')||r.includes('type')||r.includes('specialt')) return ['General Practice','Cardiology','Dermatology','Orthopedics','Pediatrics'];
+  if(r.includes('date')||r.includes('day')||r.includes('week')) return ['Monday','Tuesday','Wednesday','Thursday','Friday'];
+  if(r.includes('morning')||r.includes('afternoon')||r.includes('time')||r.includes('prefer')) return ['Morning (9AM–12PM)','Afternoon (1PM–5PM)'];
+  if(r.includes('confirm')||r.includes('correct')||r.includes('detail')) return ['Yes, confirm my booking','No, I need to make a change'];
+  if(r.includes('anything else')||r.includes('help you')) return ['No, thank you'];
+  return [];
+}
+async function agentReply(userMsg){
+  if(agentBusy) return;
+  agentBusy = true;
+  setChoices([]);
+  history.push({role:'user', content:userMsg});
+  extractInfo(userMsg);
+  showTyping();
+  setStatus('Agent is thinking…', true);
+  setOrb('');
+  try{
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:200,
+        system: SYSTEM,
+        messages: history
+      })
+    });
+    const data = await res.json();
+    const reply = data.content?.[0]?.text || 'I apologize, I encountered a brief issue. Could you please repeat that?';
+    removeTyping();
+    history.push({role:'assistant', content:reply});
+    addBubble(reply, 'agent');
+    setChoices(guessChoices(reply));
+    extractInfo(reply);
+    speak(reply);
+  } catch(e){
+    removeTyping();
+    const fallback = 'I apologize for the brief interruption. Could you please hold for a moment?';
+    addBubble(fallback, 'agent');
+    speak(fallback);
+  }
+  agentBusy = false;
+}
+function speak(text){
+  if(!synth) return;
+  synth.cancel();
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.rate = 0.92;
+  utt.pitch = 1.0;
+  const voices = synth.getVoices();
+  const pref = voices.find(v => v.name.includes('Google UK English Female'))
+    || voices.find(v => v.lang === 'en-GB')
+    || voices.find(v => v.lang.startsWith('en'));
+  if(pref) utt.voice = pref;
+  utt.onstart = () => { setOrb('speaking'); setStatus('Agent is speaking…', true); };
+  utt.onend = () => { setOrb(''); setStatus('Online · Ready', true); };
+  synth.speak(utt);
+}
+function userSay(text){
+  if(agentBusy) return;
+  addBubble(text, 'user');
+  agentReply(text);
+}
+function sendText(){
+  const inp = document.getElementById('text-input');
+  const val = inp.value.trim();
+  if(!val) return;
+  inp.value = '';
+  userSay(val);
+}
+function toggleMic(){
+  if(micActive){ stopMic(); return; }
+  if(!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)){
+    addBubble('Voice input is not supported in this browser. Please use the text field below.', 'agent');
+    return;
+  }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SR();
+  recognition.lang = 'en-US';
+  recognition.interimResults = false;
+  recognition.onstart = () => {
+    micActive = true;
+    document.getElementById('mic-btn').className = 'mic-btn recording';
+    document.getElementById('mic-btn').innerHTML = '<i class="ti ti-microphone-off"></i>';
+    setOrb('listening');
+    setStatus('Listening…', true);
+  };
+  recognition.onresult = (e) => {
+    const t = e.results[0][0].transcript;
+    stopMic();
+    userSay(t);
+  };
+  recognition.onerror = () => stopMic();
+  recognition.onend = () => stopMic();
+  recognition.start();
+}
+function stopMic(){
+  micActive = false;
+  if(recognition) recognition.stop();
+  document.getElementById('mic-btn').className = 'mic-btn idle';
+  document.getElementById('mic-btn').innerHTML = '<i class="ti ti-microphone"></i>';
+  setOrb('');
+  setStatus('Online · Ready', true);
+}
+window.addEventListener('load', () => {
+  if(synth && synth.onvoiceschanged !== undefined){
+    synth.onvoiceschanged = () => {};
+  }
+  setTimeout(() => {
+    const greeting = "Good day. Thank you for calling MedCare Clinic. My name is MedAssist, your appointment booking assistant. May I please have your full name?";
+    addBubble(greeting, 'agent');
+    history.push({role:'assistant', content:greeting});
+    speak(greeting);
+    setChoices(['John Smith','Maria Santos','Carlos Reyes','Ana Garcia']);
+  }, 700);
+});
+</script>
+</body>
+</html>
