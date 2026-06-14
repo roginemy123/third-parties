@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Islas Bantayan | Luxury Catering & Tourism</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  /* ===== TOKENS ===== */
+  :root {
+    --black:    #0A0A0A;
+    --deep:     #0F0E0C;
+    --charcoal: #1A1714;
+    --gold:     #C9A84C;
+    --gold-lt:  #E8C96E;
+    --gold-dk:  #8F6D28;
+    --cream:    #F5EDD8;
+    --muted:    #9A8F7E;
+    --white:    #FFFFFF;
+    --card-bg:  #161410;
+    --border:   rgba(201,168,76,0.25);
+
+    --font-display: 'Cormorant Garamond', serif;
+    --font-body:    'Jost', sans-serif;
+
+    --section-pad: 120px;
+    --gap: 60px;
+  }
+
+  /* ===== RESET ===== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--black);
+    color: var(--cream);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+  img { display: block; width: 100%; object-fit: cover; }
+  a { text-decoration: none; color: inherit; }
+  ul { list-style: none; }
+
+  /* ===== SCROLLBAR ===== */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb { background: var(--gold-dk); border-radius: 3px; }
+
+  /* ===== TYPOGRAPHY SCALE ===== */
+  .eyebrow {
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 400; line-height: 1.1; }
+  h1 { font-size: 88px; }
+  h2 { font-size: 56px; }
+  h3 { font-size: 32px; }
+  h4 { font-size: 22px; }
+  p { font-size: 16px; line-height: 1.8; color: var(--muted); }
+
+  /* ===== GOLD DIVIDER ===== */
+  .divider {
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 24px;
+  }
+  .divider-line { flex: 1; max-width: 40px; height: 1px; background: var(--gold); }
+  .divider span { font-size: 18px; color: var(--gold); }
+
+  /* ===== BUTTONS ===== */
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 16px 36px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.35s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: var(--gold);
+    transform: translateX(-100%);
+    transition: transform 0.35s ease;
+    z-index: 0;
+  }
+  .btn:hover::before { transform: translateX(0); }
+  .btn:hover { color: var(--black); }
+  .btn span, .btn i { position: relative; z-index: 1; }
+
+  .btn-solid {
+    background: var(--gold);
+    color: var(--black);
+  }
+  .btn-solid::before { background: var(--cream); }
+  .btn-solid:hover { color: var(--black); }
+
+  /* ===== LOGO SVG ===== */
+  .logo-mark {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .logo-svg { width: 42px; height: 42px; flex-shrink: 0; }
+  .logo-text-wrap { display: flex; flex-direction: column; line-height: 1; }
+  .logo-name {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: var(--cream);
+  }
+  .logo-tagline {
+    font-family: var(--font-body);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-top: 3px;
+  }
+
+  /* ===== NAV ===== */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 28px 64px;
+    transition: all 0.4s ease;
+  }
+  nav.scrolled {
+    background: rgba(10,10,10,0.96);
+    padding: 18px 64px;
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(10px);
+  }
+  .nav-links {
+    display: flex; align-items: center; gap: 40px;
+  }
+  .nav-links a {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--cream);
+    opacity: 0.75;
+    transition: opacity 0.25s, color 0.25s;
+  }
+  .nav-links a:hover { opacity: 1; color: var(--gold); }
+  .nav-links a.active { opacity: 1; color: var(--gold); }
+  .nav-cta { display: flex; align-items: center; }
+  .hamburger {
+    display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px;
+  }
+  .hamburger span { display: block; width: 26px; height: 1px; background: var(--cream); transition: all 0.3s; }
+  .mobile-menu {
+    display: none; position: fixed; inset: 0; background: var(--deep);
+    flex-direction: column; align-items: center; justify-content: center; gap: 40px;
+    z-index: 999;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    font-family: var(--font-display);
+    font-size: 40px;
+    font-style: italic;
+    color: var(--cream);
+    opacity: 0.8;
+    transition: opacity 0.2s, color 0.2s;
+  }
+  .mobile-menu a:hover { opacity: 1; color: var(--gold); }
+  .mobile-close {
+    position: absolute; top: 28px; right: 36px;
+    background: none; border: none; color: var(--muted); font-size: 28px; cursor: pointer;
+  }
+
+  /* ===== PAGE SECTIONS (hidden/shown) ===== */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ===== HERO ===== */
+  .hero {
+    position: relative; height: 100vh; min-height: 700px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1510771463146-e89e6e86560e?w=1800&q=80');
+    background-size: cover; background-position: center;
+    transform: scale(1.06);
+    transition: transform 8s ease;
+  }
+  .hero-bg.loaded { transform: scale(1); }
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(10,10,10,0.88) 0%, rgba(10,10,10,0.55) 60%, rgba(10,10,10,0.75) 100%);
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    text-align: center;
+    padding: 0 24px;
+    max-width: 900px;
+  }
+  .hero-eyebrow {
+    font-family: var(--font-body);
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 6px; text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 28px;
+    opacity: 0; animation: fadeUp 0.9s 0.2s forwards;
+  }
+  .hero h1 {
+    font-style: italic;
+    color: var(--white);
+    margin-bottom: 28px;
+    opacity: 0; animation: fadeUp 0.9s 0.45s forwards;
+  }
+  .hero h1 em { color: var(--gold); font-style: normal; }
+  .hero-sub {
+    font-size: 17px; color: rgba(245,237,216,0.75);
+    max-width: 520px; margin: 0 auto 48px;
+    font-weight: 300; line-height: 1.7;
+    opacity: 0; animation: fadeUp 0.9s 0.7s forwards;
+  }
+  .hero-btns {
+    display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;
+    opacity: 0; animation: fadeUp 0.9s 0.9s forwards;
+  }
+  .hero-scroll {
+    position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--muted); z-index: 2;
+    animation: bounce 2s infinite 2s;
+  }
+  .hero-scroll i { font-size: 18px; color: var(--gold); }
+  .hero-gold-bar {
+    position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+    width: 4px; height: 120px; background: var(--gold);
+    opacity: 0; animation: fadeIn 1.2s 1.2s forwards;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50%       { transform: translateX(-50%) translateY(8px); }
+  }
+
+  /* ===== STRIP ===== */
+  .strip {
+    background: var(--gold);
+    padding: 22px 64px;
+    display: flex; align-items: center; justify-content: center; gap: 60px;
+    flex-wrap: wrap;
+  }
+  .strip-item {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--black);
+  }
+  .strip-item i { font-size: 18px; }
+
+  /* ===== GENERIC SECTION ===== */
+  .section {
+    padding: var(--section-pad) 64px;
+  }
+  .section-inner { max-width: 1200px; margin: 0 auto; }
+  .section-header { margin-bottom: 64px; }
+  .section-header h2 { color: var(--cream); margin-top: 16px; }
+
+  /* ===== ABOUT SPLIT ===== */
+  .about-split {
+    display: flex; gap: 80px; align-items: center;
+  }
+  .about-image-wrap {
+    flex: 0 0 480px; position: relative;
+  }
+  .about-image-wrap img {
+    height: 580px; border: 1px solid var(--border);
+  }
+  .about-badge {
+    position: absolute; bottom: -24px; right: -24px;
+    width: 140px; height: 140px;
+    background: var(--gold);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    border: 4px solid var(--black);
+  }
+  .about-badge .num {
+    font-family: var(--font-display);
+    font-size: 48px; font-weight: 300;
+    color: var(--black); line-height: 1;
+  }
+  .about-badge .lbl {
+    font-size: 10px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--black);
+    text-align: center; line-height: 1.3;
+  }
+  .about-body { flex: 1; }
+  .about-body h2 { color: var(--cream); margin: 16px 0 24px; }
+  .about-body p { margin-bottom: 20px; }
+  .about-stats {
+    display: flex; gap: 48px; margin: 40px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 32px 0;
+  }
+  .stat-item { text-align: left; }
+  .stat-num {
+    font-family: var(--font-display);
+    font-size: 44px; font-weight: 300;
+    color: var(--gold); line-height: 1;
+  }
+  .stat-lbl {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: var(--muted); margin-top: 6px;
+  }
+
+  /* ===== FEATURES ===== */
+  .features-grid {
+    display: flex; gap: 24px; flex-wrap: wrap;
+  }
+  .feature-card {
+    flex: 1; min-width: 220px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 40px 32px;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .feature-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-6px);
+  }
+  .feature-icon {
+    width: 52px; height: 52px;
+    border: 1px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 24px; color: var(--gold); font-size: 20px;
+  }
+  .feature-card h4 { color: var(--cream); margin-bottom: 12px; }
+  .feature-card p { font-size: 15px; }
+
+  /* ===== SERVICES ===== */
+  .services-bg { background: var(--charcoal); }
+  .services-grid {
+    display: flex; gap: 32px; flex-wrap: wrap;
+  }
+  .service-card {
+    flex: 1; min-width: 280px;
+    position: relative; overflow: hidden;
+    cursor: pointer;
+  }
+  .service-card img {
+    height: 400px;
+    transition: transform 0.6s ease;
+  }
+  .service-card:hover img { transform: scale(1.06); }
+  .service-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(10,10,10,0.92) 40%, transparent 80%);
+    display: flex; flex-direction: column;
+    justify-content: flex-end; padding: 36px 28px;
+    transition: background 0.3s;
+  }
+  .service-card:hover .service-overlay {
+    background: linear-gradient(to top, rgba(10,10,10,0.97) 60%, rgba(10,10,10,0.2) 100%);
+  }
+  .service-tag {
+    font-size: 10px; font-weight: 700; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .service-overlay h3 { color: var(--cream); margin-bottom: 12px; }
+  .service-overlay p { font-size: 15px; margin-bottom: 24px;
+    max-height: 0; overflow: hidden; transition: max-height 0.4s ease, opacity 0.4s; opacity: 0; }
+  .service-card:hover .service-overlay p { max-height: 120px; opacity: 1; }
+  .service-link {
+    font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--gold); display: flex; align-items: center; gap: 8px;
+    opacity: 0; transform: translateY(10px);
+    transition: opacity 0.4s 0.1s, transform 0.4s 0.1s;
+  }
+  .service-card:hover .service-link { opacity: 1; transform: translateY(0); }
+
+  /* ===== DESTINATIONS ===== */
+  .destinations-grid {
+    display: flex; gap: 24px; flex-wrap: wrap;
+  }
+  .dest-card {
+    flex: 1; min-width: 260px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  .dest-card:hover { border-color: var(--gold); }
+  .dest-card img { height: 220px; transition: transform 0.5s; }
+  .dest-card:hover img { transform: scale(1.05); }
+  .dest-info { padding: 28px 24px; }
+  .dest-location {
+    font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+  }
+  .dest-info h4 { color: var(--cream); margin-bottom: 10px; }
+  .dest-info p { font-size: 14px; margin-bottom: 20px; }
+  .dest-meta {
+    display: flex; gap: 20px; border-top: 1px solid var(--border); padding-top: 16px;
+  }
+  .dest-meta span { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+  .dest-meta i { color: var(--gold); font-size: 12px; }
+
+  /* ===== QUOTE BAND ===== */
+  .quote-band {
+    background: var(--deep);
+    padding: 100px 64px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    position: relative; overflow: hidden;
+  }
+  .quote-band::before, .quote-band::after {
+    content: '"';
+    font-family: var(--font-display);
+    font-size: 300px; line-height: 1;
+    color: rgba(201,168,76,0.05);
+    position: absolute; top: -40px;
+  }
+  .quote-band::before { left: 24px; }
+  .quote-band::after { right: 24px; }
+  .quote-band blockquote {
+    font-family: var(--font-display);
+    font-size: 40px; font-style: italic;
+    color: var(--cream); max-width: 760px; margin: 0 auto;
+    line-height: 1.4; position: relative; z-index: 1;
+  }
+  .quote-band cite {
+    display: block; margin-top: 24px;
+    font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--gold); font-style: normal;
+  }
+
+  /* ===== TESTIMONIALS ===== */
+  .testimonials-bg { background: var(--charcoal); }
+  .testimonials-grid {
+    display: flex; gap: 24px; flex-wrap: wrap;
+  }
+  .testi-card {
+    flex: 1; min-width: 280px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 40px 32px;
+  }
+  .testi-stars { color: var(--gold); font-size: 14px; margin-bottom: 20px; letter-spacing: 3px; }
+  .testi-text {
+    font-family: var(--font-display);
+    font-size: 20px; font-style: italic;
+    color: var(--cream); margin-bottom: 24px; line-height: 1.6;
+  }
+  .testi-author { display: flex; align-items: center; gap: 14px; }
+  .testi-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    border: 2px solid var(--gold); overflow: hidden; flex-shrink: 0;
+  }
+  .testi-avatar img { height: 44px; }
+  .testi-name { font-size: 14px; font-weight: 600; color: var(--cream); }
+  .testi-role { font-size: 12px; color: var(--muted); letter-spacing: 1px; }
+
+  /* ===== CTA BANNER ===== */
+  .cta-banner {
+    position: relative; overflow: hidden;
+    padding: 120px 64px; text-align: center;
+  }
+  .cta-banner-bg {
+    position: absolute; inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1600&q=80');
+    background-size: cover; background-position: center;
+    filter: brightness(0.25);
+  }
+  .cta-banner-content { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
+  .cta-banner h2 { color: var(--cream); margin: 16px 0 20px; }
+  .cta-banner p { font-size: 18px; margin-bottom: 48px; }
+  .cta-btns { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+
+  /* ===== CONTACT ===== */
+  .contact-split {
+    display: flex; gap: 80px; align-items: flex-start;
+  }
+  .contact-info { flex: 0 0 380px; }
+  .contact-info h2 { color: var(--cream); margin: 16px 0 24px; }
+  .contact-info p { margin-bottom: 40px; }
+  .contact-items { display: flex; flex-direction: column; gap: 28px; }
+  .contact-item { display: flex; gap: 20px; align-items: flex-start; }
+  .c-icon {
+    width: 48px; height: 48px; flex-shrink: 0;
+    border: 1px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold); font-size: 18px;
+  }
+  .c-label { font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); }
+  .c-val { font-size: 16px; color: var(--cream); margin-top: 4px; }
+  .contact-form { flex: 1; }
+  .form-row { display: flex; gap: 20px; }
+  .form-group { flex: 1; margin-bottom: 20px; display: flex; flex-direction: column; }
+  .form-group label {
+    font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 10px;
+  }
+  .form-group input, .form-group select, .form-group textarea {
+    background: var(--card-bg); border: 1px solid var(--border);
+    color: var(--cream); font-family: var(--font-body); font-size: 16px;
+    padding: 16px 20px; outline: none;
+    transition: border-color 0.3s;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: var(--gold);
+  }
+  .form-group select option { background: var(--card-bg); }
+  .form-group textarea { height: 140px; resize: vertical; }
+  .form-success {
+    display: none; text-align: center; padding: 40px;
+    background: var(--card-bg); border: 1px solid var(--gold);
+  }
+  .form-success i { font-size: 40px; color: var(--gold); margin-bottom: 16px; }
+  .form-success h4 { color: var(--cream); margin-bottom: 10px; }
+
+  /* ===== MAP PLACEHOLDER ===== */
+  .map-wrap {
+    height: 320px; position: relative; overflow: hidden;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    background: var(--card-bg); margin-top: 60px;
+  }
+  .map-wrap img { position: absolute; inset: 0; filter: saturate(0) brightness(0.5); }
+  .map-pin {
+    position: relative; z-index: 1; text-align: center;
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+  }
+  .map-pin i { font-size: 40px; color: var(--gold); }
+  .map-pin span { font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: var(--cream); }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: var(--deep);
+    border-top: 1px solid var(--border);
+    padding: 80px 64px 40px;
+  }
+  .footer-main {
+    display: flex; gap: 60px; flex-wrap: wrap;
+    margin-bottom: 60px;
+  }
+  .footer-brand { flex: 0 0 300px; }
+  .footer-brand p { margin-top: 20px; font-size: 15px; }
+  .footer-socials {
+    display: flex; gap: 14px; margin-top: 28px;
+  }
+  .footer-socials a {
+    width: 38px; height: 38px; border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted); font-size: 15px;
+    transition: border-color 0.3s, color 0.3s;
+  }
+  .footer-socials a:hover { border-color: var(--gold); color: var(--gold); }
+  .footer-col { flex: 1; min-width: 160px; }
+  .footer-col h4 {
+    font-family: var(--font-body); font-size: 11px;
+    font-weight: 700; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 24px;
+  }
+  .footer-col ul { display: flex; flex-direction: column; gap: 12px; }
+  .footer-col ul li a {
+    font-size: 15px; color: var(--muted);
+    transition: color 0.25s;
+  }
+  .footer-col ul li a:hover { color: var(--cream); }
+  .footer-bottom {
+    border-top: 1px solid var(--border);
+    padding-top: 32px;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
+  }
+  .footer-bottom p { font-size: 13px; }
+  .footer-bottom-links { display: flex; gap: 28px; }
+  .footer-bottom-links a { font-size: 13px; color: var(--muted); transition: color 0.25s; }
+  .footer-bottom-links a:hover { color: var(--cream); }
+
+  /* ===== ABOUT PAGE ===== */
+  .about-hero {
+    height: 55vh; min-height: 400px; position: relative;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .about-hero-bg {
+    position: absolute; inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1600&q=80');
+    background-size: cover; background-position: center;
+  }
+  .about-hero-overlay {
+    position: absolute; inset: 0;
+    background: rgba(10,10,10,0.72);
+  }
+  .page-hero-content {
+    position: relative; z-index: 1; text-align: center;
+  }
+  .page-hero-content h1 {
+    font-style: italic; color: var(--cream);
+    font-size: 72px; margin-top: 16px;
+  }
+  .team-grid {
+    display: flex; gap: 32px; flex-wrap: wrap;
+  }
+  .team-card {
+    flex: 1; min-width: 220px; text-align: center;
+  }
+  .team-photo {
+    width: 100%; height: 300px; overflow: hidden;
+    border: 1px solid var(--border); margin-bottom: 24px;
+    transition: border-color 0.3s;
+  }
+  .team-card:hover .team-photo { border-color: var(--gold); }
+  .team-photo img { height: 300px; }
+  .team-card h4 { color: var(--cream); margin-bottom: 6px; }
+  .team-card p { font-size: 12px; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; }
+  .values-grid {
+    display: flex; gap: 24px; flex-wrap: wrap; margin-top: 60px;
+  }
+  .value-item {
+    flex: 1; min-width: 200px;
+    padding: 36px 28px;
+    border-left: 2px solid var(--gold);
+  }
+  .value-item h4 { color: var(--cream); margin: 12px 0 10px; }
+  .value-item i { font-size: 28px; color: var(--gold); }
+
+  /* ===== SERVICES PAGE ===== */
+  .services-page-hero {
+    height: 55vh; min-height: 400px; position: relative;
+    display: flex; align-items: center; justify-content: center; overflow: hidden;
+  }
+  .services-page-hero-bg {
+    position: absolute; inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1544025162-d76preurl?w=1600&q=80'), url('https://images.unsplash.com/photo-1533777857889-4be7c70b33f7?w=1600&q=80');
+    background-size: cover; background-position: center;
+  }
+  .services-page-hero-overlay { position: absolute; inset: 0; background: rgba(10,10,10,0.72); }
+  .service-full-card {
+    display: flex; gap: 0; overflow: hidden;
+    border: 1px solid var(--border); margin-bottom: 40px;
+    transition: border-color 0.3s;
+  }
+  .service-full-card:hover { border-color: var(--gold); }
+  .service-full-card:nth-child(even) { flex-direction: row-reverse; }
+  .service-full-img { flex: 0 0 420px; overflow: hidden; }
+  .service-full-img img { height: 320px; transition: transform 0.5s; }
+  .service-full-card:hover .service-full-img img { transform: scale(1.05); }
+  .service-full-body { flex: 1; padding: 48px; display: flex; flex-direction: column; justify-content: center; }
+  .service-full-body h3 { color: var(--cream); margin: 12px 0 16px; }
+  .service-full-body p { margin-bottom: 20px; }
+  .service-includes {
+    display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px;
+  }
+  .service-includes li {
+    font-size: 14px; color: var(--muted);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .service-includes li i { color: var(--gold); font-size: 12px; }
+
+  /* ===== CONTACT PAGE ===== */
+  .contact-page-hero {
+    height: 55vh; min-height: 400px; position: relative;
+    display: flex; align-items: center; justify-content: center; overflow: hidden;
+  }
+  .contact-page-hero-bg {
+    position: absolute; inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1423367696185-4ed0acba3028?w=1600&q=80');
+    background-size: cover; background-position: center;
+  }
+  .contact-page-hero-overlay { position: absolute; inset: 0; background: rgba(10,10,10,0.72); }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1100px) {
+    nav { padding: 24px 36px; }
+    nav.scrolled { padding: 16px 36px; }
+    .section { padding: 90px 36px; }
+    .about-split { flex-direction: column; }
+    .about-image-wrap { flex: none; width: 100%; }
+    .about-image-wrap img { height: 400px; }
+    .contact-split { flex-direction: column; }
+    .contact-info { flex: none; width: 100%; }
+    .service-full-card, .service-full-card:nth-child(even) { flex-direction: column; }
+    .service-full-img { flex: none; }
+    .service-full-img img { height: 240px; }
+    h1 { font-size: 64px; }
+    h2 { font-size: 44px; }
+    .strip { padding: 20px 36px; gap: 36px; }
+    .footer-main { gap: 40px; }
+    .footer-brand { flex: none; width: 100%; }
+    footer { padding: 60px 36px 32px; }
+    .cta-banner { padding: 80px 36px; }
+    .quote-band { padding: 80px 36px; }
+  }
+  @media (max-width: 768px) {
+    :root { --section-pad: 70px; }
+    nav { padding: 20px 24px; }
+    nav.scrolled { padding: 14px 24px; }
+    .nav-links, .nav-cta { display: none; }
+    .hamburger { display: flex; }
+    .section { padding: 70px 24px; }
+    h1 { font-size: 44px; }
+    h2 { font-size: 36px; }
+    .hero-scroll { display: none; }
+    .about-stats { gap: 28px; flex-wrap: wrap; }
+    .form-row { flex-direction: column; gap: 0; }
+    .footer-main { gap: 36px; }
+    footer { padding: 50px 24px 28px; }
+    .footer-bottom { flex-direction: column; text-align: center; }
+    .strip { gap: 20px; padding: 20px 24px; }
+    .cta-banner { padding: 70px 24px; }
+    .quote-band { padding: 60px 24px; }
+    .quote-band blockquote { font-size: 28px; }
+    .page-hero-content h1 { font-size: 44px; }
+    .about-badge { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" id="mobileClose"><i class="fas fa-times"></i></button>
+  <a href="#" onclick="navigate('home'); closeMobile();">Home</a>
+  <a href="#" onclick="navigate('about'); closeMobile();">About</a>
+  <a href="#" onclick="navigate('services'); closeMobile();">Services</a>
+  <a href="#" onclick="navigate('contact'); closeMobile();">Contact</a>
+</div>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <div class="logo-mark">
+    <svg class="logo-svg" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Crown -->
+      <polygon points="21,4 26,14 34,10 31,20 11,20 8,10 16,14" fill="#C9A84C" opacity="0.95"/>
+      <!-- Crown base -->
+      <rect x="10" y="19" width="22" height="3" rx="0" fill="#C9A84C"/>
+      <!-- Plate circle -->
+      <circle cx="21" cy="31" r="8" stroke="#C9A84C" stroke-width="1.5" fill="none"/>
+      <!-- Cloche dome -->
+      <path d="M15 31 Q21 24 27 31" stroke="#C9A84C" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <!-- Dots / gems on crown -->
+      <circle cx="21" cy="8" r="1.5" fill="#F5EDD8"/>
+      <circle cx="15.5" cy="13.5" r="1.2" fill="#F5EDD8"/>
+      <circle cx="26.5" cy="13.5" r="1.2" fill="#F5EDD8"/>
+    </svg>
+    <div class="logo-text-wrap">
+      <span class="logo-name">Islas Bantayan</span>
+      <span class="logo-tagline">Catering &amp; Tourism</span>
+    </div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#" onclick="navigate('home')" class="active" id="nav-home">Home</a></li>
+    <li><a href="#" onclick="navigate('about')" id="nav-about">About</a></li>
+    <li><a href="#" onclick="navigate('services')" id="nav-services">Services</a></li>
+    <li><a href="#" onclick="navigate('contact')" id="nav-contact">Contact</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a class="btn btn-solid" href="#" onclick="navigate('contact')">
+      <span>Book Now</span>
+    </a>
+  </div>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ===================== HOME PAGE ===================== -->
+<div class="page active" id="page-home">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-gold-bar"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Luxury Catering &amp; Tourism &mdash; Philippines</p>
+      <h1>Where <em>Flavor</em><br>Meets <em>Paradise</em></h1>
+      <p class="hero-sub">Elevating island celebrations with world-class cuisine and curated travel experiences across the breathtaking shores of Bantayan.</p>
+      <div class="hero-btns">
+        <a class="btn btn-solid" href="#" onclick="navigate('services')"><span>Explore Services</span> <i class="fas fa-arrow-right"></i></a>
+        <a class="btn" href="#" onclick="navigate('contact')"><span>Reserve an Experience</span></a>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <i class="fas fa-chevron-down"></i>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- STRIP -->
+  <div class="strip">
+    <div class="strip-item"><i class="fas fa-utensils"></i><span>Fine Island Catering</span></div>
+    <div class="strip-item"><i class="fas fa-compass"></i><span>Guided Island Tours</span></div>
+    <div class="strip-item"><i class="fas fa-glass-cheers"></i><span>Event & Wedding Packages</span></div>
+    <div class="strip-item"><i class="fas fa-ship"></i><span>Private Boat Experiences</span></div>
+  </div>
+
+  <!-- ABOUT INTRO -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="about-split">
+        <div class="about-image-wrap">
+          <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=900&q=80" alt="Elegant dining setup" loading="lazy">
+          <div class="about-badge">
+            <span class="num">12</span>
+            <span class="lbl">Years of Excellence</span>
+          </div>
+        </div>
+        <div class="about-body">
+          <div class="divider"><div class="divider-line"></div><span>★</span></div>
+          <p class="eyebrow">Our Story</p>
+          <h2>A Legacy Born<br><em style="font-style:italic;">on the Islands</em></h2>
+          <p>Islas Bantayan was founded on a singular vision — to bring the richness of Filipino culinary heritage and the natural splendor of Bantayan Island together into one unforgettable experience.</p>
+          <p>From intimate beachside dinners to grand celebration feasts and immersive island tours, we craft moments that linger long after the sun sets on the horizon.</p>
+          <div class="about-stats">
+            <div class="stat-item">
+              <div class="stat-num">800+</div>
+              <div class="stat-lbl">Events Hosted</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num">40+</div>
+              <div class="stat-lbl">Tour Packages</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num">98%</div>
+              <div class="stat-lbl">Client Satisfaction</div>
+            </div>
+          </div>
+          <a class="btn" href="#" onclick="navigate('about')"><span>Our Full Story</span> <i class="fas fa-long-arrow-alt-right"></i></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section" style="background:var(--charcoal); padding-top:80px; padding-bottom:80px;">
+    <div class="section-inner">
+      <div class="section-header" style="text-align:center; margin-bottom:48px;">
+        <p class="eyebrow">Why Choose Us</p>
+        <h2>Crafted with Purpose,<br>Delivered with Passion</h2>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-crown"></i></div>
+          <h4>Luxury Standard</h4>
+          <p>Every detail — from table linen to plating — is curated to reflect the highest standard of elegance.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-fish"></i></div>
+          <h4>Fresh Local Ingredients</h4>
+          <p>We source directly from local fishermen and farmers, ensuring authentic island flavors in every dish.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-map-marked-alt"></i></div>
+          <h4>Expert Local Guides</h4>
+          <p>Our seasoned island guides bring destinations to life with insider knowledge and personal stories.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-concierge-bell"></i></div>
+          <h4>Personalized Service</h4>
+          <p>Every event and tour is tailored specifically to you — your vision, your pace, your celebration.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES PREVIEW -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-header">
+        <p class="eyebrow">What We Offer</p>
+        <h2>Experiences Beyond<br>the Ordinary</h2>
+      </div>
+      <div class="services-grid">
+        <div class="service-card">
+          <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=700&q=80" alt="Fine Catering" loading="lazy">
+          <div class="service-overlay">
+            <span class="service-tag">Catering</span>
+            <h3>Fine Island Catering</h3>
+            <p>Bespoke menus crafted from the freshest local produce, served with impeccable style at any venue.</p>
+            <span class="service-link"><span>Learn More</span> <i class="fas fa-arrow-right"></i></span>
+          </div>
+        </div>
+        <div class="service-card">
+          <img src="https://images.unsplash.com/photo-1506953823976-52e1fdc0149a?w=700&q=80" alt="Island Tours" loading="lazy">
+          <div class="service-overlay">
+            <span class="service-tag">Tourism</span>
+            <h3>Curated Island Tours</h3>
+            <p>Discover hidden coves, pristine beaches, and cultural gems with our private guided tours.</p>
+            <span class="service-link"><span>Learn More</span> <i class="fas fa-arrow-right"></i></span>
+          </div>
+        </div>
+        <div class="service-card">
+          <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=700&q=80" alt="Weddings" loading="lazy">
+          <div class="service-overlay">
+            <span class="service-tag">Events</span>
+            <h3>Weddings & Celebrations</h3>
+            <p>From intimate beach ceremonies to grand island galas — we turn your dream day into reality.</p>
+            <span class="service-link"><span>Learn More</span> <i class="fas fa-arrow-right"></i></span>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center; margin-top:48px;">
+        <a class="btn" href="#" onclick="navigate('services')"><span>View All Services</span> <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- DESTINATIONS -->
+  <section class="section" style="background:var(--charcoal); padding-top:80px; padding-bottom:80px;">
+    <div class="section-inner">
+      <div class="section-header">
+        <p class="eyebrow">Top Destinations</p>
+        <h2>Discover the <em style="font-style:italic;">Islands</em></h2>
+      </div>
+      <div class="destinations-grid">
+        <div class="dest-card">
+          <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=80" alt="Bantayan Beach" loading="lazy">
+          <div class="dest-info">
+            <div class="dest-location"><i class="fas fa-map-pin"></i> Cebu, Philippines</div>
+            <h4>Bantayan Island</h4>
+            <p>Crystal-clear waters and powdery white sand make this the crown jewel of our tour collection.</p>
+            <div class="dest-meta">
+              <span><i class="fas fa-clock"></i> 3 Days / 2 Nights</span>
+              <span><i class="fas fa-users"></i> Up to 20 guests</span>
+            </div>
+          </div>
+        </div>
+        <div class="dest-card">
+          <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600&q=80" alt="Virgin Island" loading="lazy">
+          <div class="dest-info">
+            <div class="dest-location"><i class="fas fa-map-pin"></i> Bantayan, Philippines</div>
+            <h4>Virgin Island Retreat</h4>
+            <p>A secluded sandbar paradise — perfect for private dining under the stars or sunrise brunches.</p>
+            <div class="dest-meta">
+              <span><i class="fas fa-clock"></i> Day Tour</span>
+              <span><i class="fas fa-users"></i> Up to 40 guests</span>
+            </div>
+          </div>
+        </div>
+        <div class="dest-card">
+          <img src="https://images.unsplash.com/photo-1559494007-9f5847c49d94?w=600&q=80" alt="Island Sunset" loading="lazy">
+          <div class="dest-info">
+            <div class="dest-location"><i class="fas fa-map-pin"></i> Santa Fe, Bantayan</div>
+            <h4>Sunset Cruise & Dinner</h4>
+            <p>Watch the sky turn gold aboard a private boat while enjoying a five-course Filipino feast.</p>
+            <div class="dest-meta">
+              <span><i class="fas fa-clock"></i> Evening (4hrs)</span>
+              <span><i class="fas fa-users"></i> Up to 15 guests</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUOTE -->
+  <div class="quote-band">
+    <blockquote>
+      "The island does not just feed your body — it nourishes your soul."
+      <cite>&mdash; The Islas Bantayan Philosophy</cite>
+    </blockquote>
+  </div>
+
+  <!-- TESTIMONIALS -->
+  <section class="section testimonials-bg">
+    <div class="section-inner">
+      <div class="section-header" style="text-align:center;">
+        <p class="eyebrow">Guest Stories</p>
+        <h2>What Our Guests Say</h2>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-text">"Our wedding on the beach was absolutely magical. Islas Bantayan handled everything flawlessly — the food was extraordinary and the sunset backdrop was breathtaking."</p>
+          <div class="testi-author">
+            <div class="testi-avatar"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80" alt="Sofia"></div>
+            <div>
+              <div class="testi-name">Sofia & Marco Reyes</div>
+              <div class="testi-role">Wedding Clients, 2024</div>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-text">"The private island tour with a curated dinner was unlike anything I've experienced. Every detail was thoughtfully arranged. Bantayan Island is now my favourite place on earth."</p>
+          <div class="testi-author">
+            <div class="testi-avatar"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80" alt="James"></div>
+            <div>
+              <div class="testi-name">James Hartwell</div>
+              <div class="testi-role">Tourism Guest, Australia</div>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-text">"We hosted our corporate retreat with Islas Bantayan and the team exceeded every expectation. Professional, luxurious, and deeply personal — it felt like we owned the whole island."</p>
+          <div class="testi-author">
+            <div class="testi-avatar"><img src="https://images.unsplash.com/photo-1554151228-14d9def656e4?w=100&q=80" alt="Claire"></div>
+            <div>
+              <div class="testi-name">Claire Nguyen</div>
+              <div class="testi-role">Corporate Events, Singapore</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BANNER -->
+  <div class="cta-banner">
+    <div class="cta-banner-bg"></div>
+    <div class="cta-banner-content">
+      <p class="eyebrow">Begin Your Journey</p>
+      <h2>Ready to Create Your Island Memory?</h2>
+      <p>Whether it's a dream wedding, an intimate dinner, or an island adventure — we are here to make it extraordinary.</p>
+      <div class="cta-btns">
+        <a class="btn btn-solid" href="#" onclick="navigate('contact')"><span>Book a Consultation</span> <i class="fas fa-calendar-check"></i></a>
+        <a class="btn" href="#" onclick="navigate('services')"><span>View All Packages</span></a>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page-home -->
+
+<!-- ===================== ABOUT PAGE ===================== -->
+<div class="page" id="page-about">
+  <div class="about-hero">
+    <div class="about-hero-bg"></div>
+    <div class="about-hero-overlay"></div>
+    <div class="page-hero-content">
+      <p class="eyebrow">Who We Are</p>
+      <h1>Our Story</h1>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="section-inner">
+      <div class="about-split">
+        <div class="about-image-wrap">
+          <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=900&q=80" alt="Chef preparing island cuisine" loading="lazy">
+        </div>
+        <div class="about-body">
+          <div class="divider"><div class="divider-line"></div><span>★</span></div>
+          <p class="eyebrow">Our Heritage</p>
+          <h2>Born from the<br><em style="font-style:italic;">Heart of Bantayan</em></h2>
+          <p>Islas Bantayan was founded in 2013 by a team of passionate islanders who believed that Bantayan's beauty and culinary richness deserved to be shared with the world in the most luxurious way possible.</p>
+          <p>What began as a small beachside catering service has grown into the premier luxury catering and tourism company in the Visayas region — trusted by hundreds of couples, travelers, and corporate clients from around the globe.</p>
+          <p>Our roots run deep into Filipino tradition, while our vision looks forward — blending heritage flavors with contemporary culinary artistry, and island adventures with five-star comfort.</p>
+        </div>
+      </div>
+
+      <div class="values-grid">
+        <div class="value-item">
+          <i class="fas fa-heart"></i>
+          <h4>Passion</h4>
+          <p>Every dish and every tour is made with genuine love for our island home and the people we serve.</p>
+        </div>
+        <div class="value-item">
+          <i class="fas fa-leaf"></i>
+          <h4>Sustainability</h4>
+          <p>We work with local communities and maintain eco-responsible practices in all our operations.</p>
+        </div>
+        <div class="value-item">
+          <i class="fas fa-gem"></i>
+          <h4>Excellence</h4>
+          <p>We hold ourselves to the highest standards — no compromise on quality, service, or experience.</p>
+        </div>
+        <div class="value-item">
+          <i class="fas fa-handshake"></i>
+          <h4>Integrity</h4>
+          <p>Transparent pricing, honest communication, and a deep commitment to every client's trust.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background:var(--charcoal); padding-top:80px; padding-bottom:80px;">
+    <div class="section-inner">
+      <div class="section-header" style="text-align:center;">
+        <p class="eyebrow">The Team</p>
+        <h2>Meet the Faces<br>Behind the Magic</h2>
+      </div>
+      <div class="team-grid">
+        <div class="team-card">
+          <div class="team-photo"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=500&q=80" alt="Ricardo Santos" loading="lazy"></div>
+          <h4>Ricardo Santos</h4>
+          <p>Founder &amp; CEO</p>
+        </div>
+        <div class="team-card">
+          <div class="team-photo"><img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=500&q=80" alt="Maria Dela Cruz" loading="lazy"></div>
+          <h4>Maria Dela Cruz</h4>
+          <p>Executive Chef</p>
+        </div>
+        <div class="team-card">
+          <div class="team-photo"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&q=80" alt="Juan Mercado" loading="lazy"></div>
+          <h4>Juan Mercado</h4>
+          <p>Head of Tourism</p>
+        </div>
+        <div class="team-card">
+          <div class="team-photo"><img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=500&q=80" alt="Elena Torres" loading="lazy"></div>
+          <h4>Elena Torres</h4>
+          <p>Events Director</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-banner">
+    <div class="cta-banner-bg"></div>
+    <div class="cta-banner-content">
+      <p class="eyebrow">Let's Connect</p>
+      <h2>Experience Islas Bantayan for Yourself</h2>
+      <p>We'd love to learn about your vision and craft the perfect island experience for you.</p>
+      <div class="cta-btns">
+        <a class="btn btn-solid" href="#" onclick="navigate('contact')"><span>Get in Touch</span></a>
+      </div>
+    </div>
+  </div>
+</div><!-- /page-about -->
+
+<!-- ===================== SERVICES PAGE ===================== -->
+<div class="page" id="page-services">
+  <div class="services-page-hero">
+    <div class="services-page-hero-bg"></div>
+    <div class="services-page-hero-overlay"></div>
+    <div class="page-hero-content">
+      <p class="eyebrow">What We Offer</p>
+      <h1>Our Services</h1>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-header" style="text-align:center;">
+        <p class="eyebrow">Luxury Catering</p>
+        <h2>Taste the Islands</h2>
+      </div>
+
+      <div class="service-full-card">
+        <div class="service-full-img">
+          <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80" alt="Fine Dining Catering" loading="lazy">
+        </div>
+        <div class="service-full-body">
+          <p class="eyebrow">Signature Service</p>
+          <h3>Fine Island Catering</h3>
+          <p>Our flagship catering service delivers a multi-course dining experience using the freshest local seafood, tropical produce, and traditional Filipino recipes elevated with modern culinary technique.</p>
+          <ul class="service-includes">
+            <li><i class="fas fa-check"></i> Custom menu design with our Executive Chef</li>
+            <li><i class="fas fa-check"></i> Professional service staff & sommelier</li>
+            <li><i class="fas fa-check"></i> Full venue setup, linens & florals</li>
+            <li><i class="fas fa-check"></i> Available for 10 to 500 guests</li>
+          </ul>
+          <a class="btn" href="#" onclick="navigate('contact')"><span>Enquire Now</span> <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <div class="service-full-card">
+        <div class="service-full-img">
+          <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800&q=80" alt="Weddings" loading="lazy">
+        </div>
+        <div class="service-full-body">
+          <p class="eyebrow">Celebrations</p>
+          <h3>Weddings & Private Events</h3>
+          <p>Your dream beach wedding or milestone celebration deserves the very best. Our events team manages every element — from ceremony setup to the final toast — with meticulous care.</p>
+          <ul class="service-includes">
+            <li><i class="fas fa-check"></i> Full event planning &amp; coordination</li>
+            <li><i class="fas fa-check"></i> Beachside &amp; venue ceremony options</li>
+            <li><i class="fas fa-check"></i> Custom catering menu &amp; wedding cake</li>
+            <li><i class="fas fa-check"></i> Floral, lighting &amp; decor design</li>
+          </ul>
+          <a class="btn" href="#" onclick="navigate('contact')"><span>Plan Your Event</span> <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <div class="section-header" style="text-align:center; margin-top:80px;">
+        <p class="eyebrow">Island Tourism</p>
+        <h2>Explore &amp; Discover</h2>
+      </div>
+
+      <div class="service-full-card">
+        <div class="service-full-img">
+          <img src="https://images.unsplash.com/photo-1506953823976-52e1fdc0149a?w=800&q=80" alt="Island Tour" loading="lazy">
+        </div>
+        <div class="service-full-body">
+          <p class="eyebrow">Guided Tours</p>
+          <h3>Curated Island Tours</h3>
+          <p>Explore Bantayan and its surrounding islands with our expert local guides. Whether you're after hidden beaches, cultural immersion, or underwater adventures — we have a tour for you.</p>
+          <ul class="service-includes">
+            <li><i class="fas fa-check"></i> Private &amp; group tour packages</li>
+            <li><i class="fas fa-check"></i> Snorkeling, island hopping &amp; diving</li>
+            <li><i class="fas fa-check"></i> Cultural &amp; heritage site visits</li>
+            <li><i class="fas fa-check"></i> Lunch &amp; refreshments included</li>
+          </ul>
+          <a class="btn" href="#" onclick="navigate('contact')"><span>Book a Tour</span> <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <div class="service-full-card">
+        <div class="service-full-img">
+          <img src="https://images.unsplash.com/photo-1559494007-9f5847c49d94?w=800&q=80" alt="Sunset Cruise" loading="lazy">
+        </div>
+        <div class="service-full-body">
+          <p class="eyebrow">Premium Experience</p>
+          <h3>Sunset Cruise & Dinner</h3>
+          <p>Sail into the golden hour on a private charter boat while our chef prepares a five-course Filipino dinner aboard. The ultimate luxury experience — waves, wine, and wonder.</p>
+          <ul class="service-includes">
+            <li><i class="fas fa-check"></i> Private boat charter (up to 15 guests)</li>
+            <li><i class="fas fa-check"></i> Five-course dinner prepared on board</li>
+            <li><i class="fas fa-check"></i> Premium wine &amp; cocktail pairing</li>
+            <li><i class="fas fa-check"></i> Live acoustic music optional</li>
+          </ul>
+          <a class="btn" href="#" onclick="navigate('contact')"><span>Reserve Your Cruise</span> <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-banner">
+    <div class="cta-banner-bg"></div>
+    <div class="cta-banner-content">
+      <p class="eyebrow">Custom Packages</p>
+      <h2>Can't Find Exactly What You Need?</h2>
+      <p>We create fully bespoke packages tailored to your vision, budget, and group size. Let's talk.</p>
+      <div class="cta-btns">
+        <a class="btn btn-solid" href="#" onclick="navigate('contact')"><span>Request Custom Package</span></a>
+      </div>
+    </div>
+  </div>
+</div><!-- /page-services -->
+
+<!-- ===================== CONTACT PAGE ===================== -->
+<div class="page" id="page-contact">
+  <div class="contact-page-hero">
+    <div class="contact-page-hero-bg"></div>
+    <div class="contact-page-hero-overlay"></div>
+    <div class="page-hero-content">
+      <p class="eyebrow">Reach Out</p>
+      <h1>Contact Us</h1>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="section-inner">
+      <div class="contact-split">
+        <div class="contact-info">
+          <div class="divider"><div class="divider-line"></div><span>★</span></div>
+          <p class="eyebrow">Get in Touch</p>
+          <h2>Let's Plan Something <em style="font-style:italic;">Extraordinary</em></h2>
+          <p>Whether you're ready to book or just exploring the possibilities, our team is here to guide you every step of the way.</p>
+          <div class="contact-items">
+            <div class="contact-item">
+              <div class="c-icon"><i class="fas fa-map-marker-alt"></i></div>
+              <div>
+                <div class="c-label">Our Location</div>
+                <div class="c-val">Bantayan Island, Cebu<br>Philippines 6054</div>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="c-icon"><i class="fas fa-phone-alt"></i></div>
+              <div>
+                <div class="c-label">Phone</div>
+                <div class="c-val">+63 917 800 1234</div>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="c-icon"><i class="fas fa-envelope"></i></div>
+              <div>
+                <div class="c-label">Email</div>
+                <div class="c-val">hello@islasbantayan.ph</div>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="c-icon"><i class="fas fa-clock"></i></div>
+              <div>
+                <div class="c-label">Office Hours</div>
+                <div class="c-val">Mon – Sat: 8:00 AM – 6:00 PM</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-form">
+          <div id="contactFormWrap">
+            <div class="form-row">
+              <div class="form-group">
+                <label>First Name</label>
+                <input type="text" placeholder="Your first name" id="f-fname">
+              </div>
+              <div class="form-group">
+                <label>Last Name</label>
+                <input type="text" placeholder="Your last name" id="f-lname">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Email Address</label>
+              <input type="email" placeholder="you@example.com" id="f-email">
+            </div>
+            <div class="form-group">
+              <label>Interested In</label>
+              <select id="f-service">
+                <option value="">Select a service...</option>
+                <option>Fine Island Catering</option>
+                <option>Wedding &amp; Private Event</option>
+                <option>Island Tour Package</option>
+                <option>Sunset Cruise &amp; Dinner</option>
+                <option>Custom / Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Tell Us About Your Vision</label>
+              <textarea placeholder="Share your ideas, expected guests, preferred dates..." id="f-msg"></textarea>
+            </div>
+            <button class="btn btn-solid" onclick="submitForm()" style="width:100%; justify-content:center;">
+              <span>Send Enquiry</span> <i class="fas fa-paper-plane"></i>
+            </button>
+          </div>
+          <div class="form-success" id="formSuccess">
+            <i class="fas fa-check-circle"></i>
+            <h4>Thank You for Reaching Out!</h4>
+            <p>We've received your enquiry and will get back to you within 24 hours. Your island experience awaits.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="map-wrap">
+        <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=1400&q=80" alt="Map background" loading="lazy">
+        <div class="map-pin">
+          <i class="fas fa-map-marker-alt"></i>
+          <span>Bantayan Island, Cebu, Philippines</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</div><!-- /page-contact -->
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="footer-main">
+    <div class="footer-brand">
+      <div class="logo-mark">
+        <svg class="logo-svg" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="21,4 26,14 34,10 31,20 11,20 8,10 16,14" fill="#C9A84C" opacity="0.95"/>
+          <rect x="10" y="19" width="22" height="3" fill="#C9A84C"/>
+          <circle cx="21" cy="31" r="8" stroke="#C9A84C" stroke-width="1.5" fill="none"/>
+          <path d="M15 31 Q21 24 27 31" stroke="#C9A84C" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <circle cx="21" cy="8" r="1.5" fill="#F5EDD8"/>
+          <circle cx="15.5" cy="13.5" r="1.2" fill="#F5EDD8"/>
+          <circle cx="26.5" cy="13.5" r="1.2" fill="#F5EDD8"/>
+        </svg>
+        <div class="logo-text-wrap">
+          <span class="logo-name">Islas Bantayan</span>
+          <span class="logo-tagline">Catering &amp; Tourism</span>
+        </div>
+      </div>
+      <p>Where the finest flavors of the Philippines meet the breathtaking beauty of Bantayan Island. Luxury crafted for every occasion.</p>
+      <div class="footer-socials">
+        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Navigation</h4>
+      <ul>
+        <li><a href="#" onclick="navigate('home')">Home</a></li>
+        <li><a href="#" onclick="navigate('about')">About Us</a></li>
+        <li><a href="#" onclick="navigate('services')">Services</a></li>
+        <li><a href="#" onclick="navigate('contact')">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#" onclick="navigate('services')">Fine Island Catering</a></li>
+        <li><a href="#" onclick="navigate('services')">Weddings &amp; Events</a></li>
+        <li><a href="#" onclick="navigate('services')">Curated Island Tours</a></li>
+        <li><a href="#" onclick="navigate('services')">Sunset Cruise &amp; Dinner</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="#">Bantayan Island, Cebu 6054</a></li>
+        <li><a href="tel:+639178001234">+63 917 800 1234</a></li>
+        <li><a href="mailto:hello@islasbantayan.ph">hello@islasbantayan.ph</a></li>
+        <li><a href="#">Mon–Sat: 8AM – 6PM</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p style="color:var(--muted);">&copy; 2025 Islas Bantayan. All rights reserved.</p>
+    <div class="footer-bottom-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Sitemap</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* ===== NAV SCROLL ===== */
+  window.addEventListener('scroll', () => {
+    document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  /* ===== HERO IMAGE LOAD ===== */
+  window.addEventListener('load', () => {
+    document.getElementById('heroBg').classList.add('loaded');
+  });
+
+  /* ===== NAVIGATION ===== */
+  function navigate(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+    const el = document.getElementById('nav-' + page);
+    if (el) el.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return false;
+  }
+
+  /* ===== MOBILE MENU ===== */
+  document.getElementById('hamburger').addEventListener('click', () => {
+    document.getElementById('mobileMenu').classList.add('open');
+  });
+  document.getElementById('mobileClose').addEventListener('click', closeMobile);
+  function closeMobile() {
+    document.getElementById('mobileMenu').classList.remove('open');
+  }
+
+  /* ===== FORM SUBMIT ===== */
+  function submitForm() {
+    const fname = document.getElementById('f-fname').value.trim();
+    const email = document.getElementById('f-email').value.trim();
+    if (!fname || !email) {
+      alert('Please fill in at least your name and email.');
+      return;
+    }
+    document.getElementById('contactFormWrap').style.display = 'none';
+    document.getElementById('formSuccess').style.display = 'block';
+  }
+
+  /* ===== INTERSECTION OBSERVER for cards ===== */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.feature-card, .dest-card, .testi-card, .service-full-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(24px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease, border-color 0.3s';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
