@@ -157,6 +157,8 @@
   const button = document.getElementById('submit-btn');
   const messageEl = document.getElementById('form-message');
   const WEBHOOK_URL = 'https://rogine.app.n8n.cloud/webhook-test/ae6f7fef-b08e-4538-bff3-7692ff8f9c04?action=call';
+  const AUTH_USER = 'test';
+  const AUTH_PASS = 'test@123';
 
   form.addEventListener('submit', async function (e) {
     e.preventDefault();
@@ -171,7 +173,8 @@
       const response = await fetch(WEBHOOK_URL, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': 'Basic ' + btoa(AUTH_USER + ':' + AUTH_PASS)
         },
         body: JSON.stringify({ email: email })
       });
