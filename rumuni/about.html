@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us — Rumuni</title>
+  <meta name="description" content="Learn about Rumuni — the team behind the automation and web services built for freelancers and creatives." />
+  <meta property="og:title" content="About Rumuni — Automation & Web Services" />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    /* ── MISSION SECTION ── */
+    .mission {
+      padding: 80px 24px 120px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .mission-grid {
+      display: flex;
+      gap: 64px;
+      align-items: flex-start;
+    }
+    .mission-text { flex: 1; }
+    .mission-text h2 { text-align: left; margin-bottom: 24px; }
+    .mission-text p {
+      font-size: 16px;
+      color: var(--text-muted);
+      line-height: 1.85;
+      margin-bottom: 24px;
+    }
+    .mission-sidebar { flex: 0 0 320px; }
+    .values-list { display: flex; flex-direction: column; gap: 16px; }
+    .value-item {
+      background: rgba(20,8,42,0.7);
+      border: 1px solid rgba(139,92,246,0.15);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      transition: border-color 0.3s;
+    }
+    .value-item:hover { border-color: rgba(139,92,246,0.35); }
+    .value-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: rgba(109,40,217,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: #a78bfa;
+      flex-shrink: 0;
+    }
+    .value-item h4 {
+      font-size: 15px;
+      font-weight: 600;
+      color: #e9d5ff;
+      margin-bottom: 4px;
+    }
+    .value-item p { font-size: 13px; color: var(--text-muted); line-height: 1.65; margin: 0; }
+
+    /* ── STATS STRIP ── */
+    .stats-strip {
+      padding: 60px 24px;
+      background: rgba(10,2,24,0.6);
+      border-top: 1px solid var(--border-subtle);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .stats-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .stat-item {
+      flex: 1 1 200px;
+      text-align: center;
+      padding: 24px 32px;
+      border-right: 1px solid var(--border-subtle);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-number {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 48px;
+      font-weight: 700;
+      color: #a78bfa;
+      line-height: 1;
+      display: block;
+    }
+    .stat-label {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    /* ── TEAM ── */
+    .team-section { padding: 120px 24px; }
+    .team-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      justify-content: center;
+      max-width: 1100px;
+      margin: 64px auto 0;
+    }
+    .team-card {
+      flex: 1 1 240px;
+      max-width: 280px;
+      background: rgba(20,8,42,0.7);
+      border: 1px solid rgba(139,92,246,0.15);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .team-card:hover { border-color: rgba(139,92,246,0.4); transform: translateY(-4px); }
+    .team-card-img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      filter: saturate(0.6) brightness(0.85);
+      transition: filter 0.3s;
+    }
+    .team-card:hover .team-card-img { filter: saturate(0.8) brightness(0.95); }
+    .team-card-body { padding: 24px; }
+    .team-card-body h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #e9d5ff;
+      margin-bottom: 4px;
+    }
+    .team-role {
+      font-size: 13px;
+      color: var(--purple-400);
+      margin-bottom: 12px;
+      display: block;
+    }
+    .team-bio { font-size: 13px; color: var(--text-muted); line-height: 1.65; }
+    .team-socials { display: flex; gap: 10px; margin-top: 16px; }
+    .team-socials a {
+      color: var(--purple-400);
+      font-size: 15px;
+      transition: color 0.2s;
+    }
+    .team-socials a:hover { color: var(--purple-200); }
+
+    /* ── JOURNEY TIMELINE ── */
+    .journey { padding: 120px 24px; }
+    .timeline {
+      max-width: 680px;
+      margin: 64px auto 0;
+      position: relative;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--purple-700), transparent);
+    }
+    .timeline-item {
+      padding-left: 40px;
+      padding-bottom: 48px;
+      position: relative;
+    }
+    .timeline-item:last-child { padding-bottom: 0; }
+    .timeline-dot {
+      position: absolute;
+      left: -5px;
+      top: 4px;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--purple-600);
+      border: 2px solid var(--purple-400);
+      box-shadow: 0 0 12px rgba(139,92,246,0.5);
+    }
+    .timeline-year {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: var(--purple-400);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .timeline-item h3 {
+      font-size: 18px;
+      color: #e9d5ff;
+      margin-bottom: 8px;
+    }
+    .timeline-item p { font-size: 15px; color: var(--text-muted); line-height: 1.7; }
+
+    /* ── CTA ── */
+    .about-cta {
+      padding: 120px 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .about-cta-glow {
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(109,40,217,0.15) 0%, transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+    .about-cta h2 { position: relative; z-index: 1; font-size: clamp(28px, 4vw, 46px); margin-bottom: 16px; }
+    .about-cta p { font-size: 17px; color: var(--text-muted); margin-bottom: 40px; position: relative; z-index: 1; }
+    .about-cta .btn-group { justify-content: center; position: relative; z-index: 1; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .mission-grid { flex-direction: column; gap: 48px; }
+      .mission-sidebar { flex: unset; width: 100%; }
+      .stat-item { flex: 1 1 160px; border-right: none; border-bottom: 1px solid var(--border-subtle); }
+      .stat-item:last-child { border-bottom: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav" id="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo" aria-label="Rumuni home">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="18" cy="18" r="17" stroke="#7c3aed" stroke-width="1.5"/>
+          <ellipse cx="18" cy="18" rx="10" ry="5.5" stroke="#a78bfa" stroke-width="1.2" transform="rotate(-30 18 18)"/>
+          <ellipse cx="18" cy="18" rx="10" ry="5.5" stroke="#a78bfa" stroke-width="1.2" transform="rotate(30 18 18)"/>
+          <circle cx="18" cy="18" r="3" fill="#7c3aed"/>
+        </svg>
+        <span>Rumuni</span>
+      </a>
+      <button class="nav-burger" id="navBurger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="navMenu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="navMenu" role="list">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="about.html" class="nav-link active">About</a></li>
+        <li><a href="services.html" class="nav-link">Services</a></li>
+        <li><a href="contact.html" class="nav-link">Contact</a></li>
+        <li><a href="contact.html" class="btn btn-primary nav-cta">Get Started</a></li>
+      </ul>
+      <div class="nav-overlay" id="navOverlay" aria-hidden="true"></div>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- PAGE HERO -->
+    <header class="page-hero" aria-labelledby="about-hero-heading">
+      <div class="page-hero-glow" aria-hidden="true"></div>
+      <div class="section-eyebrow">Our story</div>
+      <h1 id="about-hero-heading">We believe great work<br /><span style="background: linear-gradient(135deg,#a78bfa,#7c3aed,#c4b5fd); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;">shouldn't be buried in admin.</span></h1>
+      <p>Rumuni was built by people who got tired of watching talented freelancers spend more time on repetitive tasks than on the work they love. So we fixed it.</p>
+    </header>
+
+    <!-- STATS STRIP -->
+    <div class="stats-strip reveal-section" role="region" aria-label="Company statistics">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number">200+</span>
+          <p class="stat-label">Clients served worldwide</p>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">10×</span>
+          <p class="stat-label">Average productivity gain</p>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">98%</span>
+          <p class="stat-label">Client satisfaction rate</p>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">3yrs</span>
+          <p class="stat-label">Building for creatives</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- MISSION -->
+    <section class="mission reveal-section" aria-labelledby="mission-heading">
+      <div class="mission-grid">
+        <div class="mission-text">
+          <div class="section-eyebrow">Our mission</div>
+          <h2 id="mission-heading">Automation that feels<br />like a superpower</h2>
+          <p>Freelancers and creatives are among the most skilled people in the world. But the tools they inherit — manual invoicing, scattered client comms, copy-paste workflows — weren't built for how they work. Rumuni is.</p>
+          <p>We obsess over understanding your process before we write a single line of code. Every automation, every integration, every website we build is designed around how you actually work — not how a software manual thinks you should.</p>
+          <p>Our north star is simple: when a Rumuni client finishes onboarding, they get their time back. What they do with it is entirely up to them.</p>
+        </div>
+        <div class="mission-sidebar">
+          <h3 style="font-size:17px; color:#e9d5ff; margin-bottom:24px; font-weight:600;">What we stand for</h3>
+          <div class="values-list">
+            <div class="value-item">
+              <div class="value-icon"><i class="fa-solid fa-infinity" aria-hidden="true"></i></div>
+              <div>
+                <h4>Continuous improvement</h4>
+                <p>We build, measure, and refine. Nothing ships and sits — everything gets better.</p>
+              </div>
+            </div>
+            <div class="value-item">
+              <div class="value-icon"><i class="fa-solid fa-handshake" aria-hidden="true"></i></div>
+              <div>
+                <h4>Radical transparency</h4>
+                <p>You'll always know what we're building, why, and what it'll cost before we start.</p>
+              </div>
+            </div>
+            <div class="value-item">
+              <div class="value-icon"><i class="fa-solid fa-seedling" aria-hidden="true"></i></div>
+              <div>
+                <h4>Ownership by default</h4>
+                <p>Everything we create is yours. We don't hold code, data, or access hostage.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TEAM -->
+    <section class="team-section reveal-section" aria-labelledby="team-heading">
+      <div class="section-header">
+        <div class="section-eyebrow">The team</div>
+        <h2 id="team-heading">Built by people who<br />get creative work</h2>
+        <p class="section-sub">A small team with a big range — designers, engineers, and automation specialists who've all worked in creative industries.</p>
+      </div>
+      <div class="team-grid">
+        <article class="team-card">
+          <img class="team-card-img" src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&q=80" alt="Portrait of Alex Rivera, Co-founder and CEO of Rumuni" loading="lazy" />
+          <div class="team-card-body">
+            <h3>Alex Rivera</h3>
+            <span class="team-role">Co-founder & CEO</span>
+            <p class="team-bio">Former freelance designer who built internal tools to automate his studio — and realised everyone needed them.</p>
+            <div class="team-socials">
+              <a href="#" aria-label="Alex Rivera on LinkedIn"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i></a>
+              <a href="#" aria-label="Alex Rivera on Twitter"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+            </div>
+          </div>
+        </article>
+        <article class="team-card">
+          <img class="team-card-img" src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=400&q=80" alt="Portrait of Sam Chen, Co-founder and CTO of Rumuni" loading="lazy" />
+          <div class="team-card-body">
+            <h3>Sam Chen</h3>
+            <span class="team-role">Co-founder & CTO</span>
+            <p class="team-bio">Systems engineer with a decade of API and automation experience across fintech and media industries.</p>
+            <div class="team-socials">
+              <a href="#" aria-label="Sam Chen on LinkedIn"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i></a>
+              <a href="#" aria-label="Sam Chen on GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i></a>
+            </div>
+          </div>
+        </article>
+        <article class="team-card">
+          <img class="team-card-img" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&q=80" alt="Portrait of Maya Patel, Head of Design at Rumuni" loading="lazy" />
+          <div class="team-card-body">
+            <h3>Maya Patel</h3>
+            <span class="team-role">Head of Design</span>
+            <p class="team-bio">UX lead who believes that automation tools should be as beautiful and intuitive as the work they support.</p>
+            <div class="team-socials">
+              <a href="#" aria-label="Maya Patel on LinkedIn"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i></a>
+              <a href="#" aria-label="Maya Patel on Dribbble"><i class="fa-brands fa-dribbble" aria-hidden="true"></i></a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- JOURNEY TIMELINE -->
+    <section class="journey reveal-section" aria-labelledby="journey-heading">
+      <div class="section-header">
+        <div class="section-eyebrow">Our journey</div>
+        <h2 id="journey-heading">From side project<br />to creative infrastructure</h2>
+      </div>
+      <div class="timeline" role="list">
+        <div class="timeline-item" role="listitem">
+          <div class="timeline-dot" aria-hidden="true"></div>
+          <div class="timeline-year">2022</div>
+          <h3>The first workflow</h3>
+          <p>Alex built an automation pipeline for his own freelance studio — cutting invoice time from 4 hours a week to 10 minutes. Friends asked for the same. Rumuni was born.</p>
+        </div>
+        <div class="timeline-item" role="listitem">
+          <div class="timeline-dot" aria-hidden="true"></div>
+          <div class="timeline-year">2023</div>
+          <h3>Team and product</h3>
+          <p>Sam and Maya joined. We formalised our automation service, launched our first web development offering, and onboarded our first 50 clients across design, photography, and content creation.</p>
+        </div>
+        <div class="timeline-item" role="listitem">
+          <div class="timeline-dot" aria-hidden="true"></div>
+          <div class="timeline-year">2024</div>
+          <h3>AI capabilities</h3>
+          <p>We integrated AI-powered tools into our service stack — enabling clients to auto-draft proposals, sort inquiries, and generate content briefs at scale.</p>
+        </div>
+        <div class="timeline-item" role="listitem">
+          <div class="timeline-dot" aria-hidden="true"></div>
+          <div class="timeline-year">2025</div>
+          <h3>200+ creatives served</h3>
+          <p>Over 200 freelancers and creative studios now run on Rumuni-built workflows. We're expanding into agency partnerships and multi-user team plans.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT CTA -->
+    <section class="about-cta reveal-section" aria-labelledby="about-cta-heading">
+      <div class="about-cta-glow" aria-hidden="true"></div>
+      <div class="section-eyebrow" style="justify-content:center; display:flex;">Work with us</div>
+      <h2 id="about-cta-heading">Ready to reclaim your time?</h2>
+      <p>Get in touch and let's map out what's possible for your workflow.</p>
+      <div class="btn-group">
+        <a href="contact.html" class="btn btn-primary btn-lg">Start a project</a>
+        <a href="services.html" class="btn btn-ghost btn-lg">View services</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo footer-logo" aria-label="Rumuni home">
+          <svg width="30" height="30" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="18" cy="18" r="17" stroke="#7c3aed" stroke-width="1.5"/>
+            <ellipse cx="18" cy="18" rx="10" ry="5.5" stroke="#a78bfa" stroke-width="1.2" transform="rotate(-30 18 18)"/>
+            <ellipse cx="18" cy="18" rx="10" ry="5.5" stroke="#a78bfa" stroke-width="1.2" transform="rotate(30 18 18)"/>
+            <circle cx="18" cy="18" r="3" fill="#7c3aed"/>
+          </svg>
+          <span>Rumuni</span>
+        </a>
+        <p class="footer-tagline">Automation & Web Services<br />for freelancers and creatives.</p>
+        <div class="footer-socials">
+          <a href="#" class="social-link" aria-label="Rumuni on Twitter"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+          <a href="#" class="social-link" aria-label="Rumuni on LinkedIn"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i></a>
+          <a href="#" class="social-link" aria-label="Rumuni on GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i></a>
+          <a href="#" class="social-link" aria-label="Rumuni on Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+        </div>
+      </div>
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul role="list">
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Services</h4>
+          <ul role="list">
+            <li><a href="services.html">Workflow Automation</a></li>
+            <li><a href="services.html">Web Development</a></li>
+            <li><a href="services.html">API Integrations</a></li>
+            <li><a href="services.html">AI Tools</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <ul role="list">
+            <li><a href="mailto:hello@rumuni.io">hello@rumuni.io</a></li>
+            <li><a href="tel:+1234567890">+1 (234) 567-890</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Rumuni. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="shared.js"></script>
+</body>
+</html>

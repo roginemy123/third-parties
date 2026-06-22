@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact — Rumuni</title>
+  <meta name="description" content="Get in touch with Rumuni — book a free discovery call or send us a message about your automation and web service needs." />
+  <meta property="og:title" content="Contact Rumuni — Automation & Web Services" />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    /* ── CONTACT BODY ── */
+    .contact-body { padding: 80px 24px 120px; }
+    .contact-grid {
+      display: flex;
+      gap: 64px;
+      max-width: 1100px;
+      margin: 0 auto;
+      align-items: flex-start;
+    }
+
+    /* ── CONTACT INFO ── */
+    .contact-info { flex: 0 0 340px; }
+    .contact-info h2 {
+      font-size: clamp(24px, 3vw, 32px);
+      color: #e9d5ff;
+      margin-bottom: 16px;
+      text-align: left;
+    }
+    .contact-info > p {
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.8;
+      margin-bottom: 40px;
+    }
+    .contact-detail-list { display: flex; flex-direction: column; gap: 16px; margin-bottom: 40px; }
+    .contact-detail-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    .contact-detail-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(109,40,217,0.18);
+      border: 1px solid rgba(139,92,246,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: #a78bfa;
+      flex-shrink: 0;
+    }
+    .contact-detail-text h4 {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--purple-400);
+      margin-bottom: 4px;
+    }
+    .contact-detail-text a,
+    .contact-detail-text p {
+      font-size: 15px;
+      color: #d8b4fe;
+      transition: color 0.2s;
+    }
+    .contact-detail-text a:hover { color: var(--purple-200); text-decoration: underline; }
+
+    /* Availability indicator */
+    .availability-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(34,197,94,0.1);
+      border: 1px solid rgba(34,197,94,0.25);
+      border-radius: 20px;
+      padding: 8px 16px;
+      font-size: 13px;
+      color: #86efac;
+      margin-bottom: 32px;
+    }
+    .availability-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #4ade80;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.7); }
+    }
+
+    /* Social links in contact */
+    .contact-socials { display: flex; gap: 12px; }
+    .contact-social {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: var(--purple-400);
+      transition: border-color 0.2s, background 0.2s, color 0.2s;
+    }
+    .contact-social:hover { border-color: var(--purple-500); background: rgba(139,92,246,0.1); color: var(--purple-200); }
+
+    /* ── CONTACT FORM ── */
+    .contact-form-wrap { flex: 1; }
+    .contact-form {
+      background: rgba(20,8,42,0.7);
+      border: 1px solid rgba(139,92,246,0.15);
+      border-radius: 24px;
+      padding: 48px 40px;
+    }
+    .form-row { display: flex; gap: 20px; }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 24px;
+      flex: 1;
+    }
+    .form-group label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--purple-300);
+      letter-spacing: 0.05em;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      background: rgba(10,2,24,0.7);
+      border: 1px solid rgba(139,92,246,0.2);
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      color: #e9d5ff;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%;
+      -webkit-appearance: none;
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: rgba(196,181,253,0.3); }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: rgba(139,92,246,0.6);
+      box-shadow: 0 0 0 3px rgba(139,92,246,0.1);
+    }
+    .form-group textarea { resize: vertical; min-height: 140px; }
+    .form-group select { cursor: pointer; }
+    .form-group select option { background: #0d0117; color: #e9d5ff; }
+    .form-submit {
+      width: 100%;
+      justify-content: center;
+      padding: 18px;
+      font-size: 16px;
+      border-radius: 14px;
+    }
+    .form-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+    .form-note {
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-faint);
+      margin-top: 16px;
+    }
+    .form-note i { margin-right: 6px; }
+    .form-status {
+      text-align: center;
+      font-size: 14px;
+      margin-top: 16px;
+      min-height: 20px;
+    }
+    .form-status.success { color: #86efac; }
+    .form-status.error { color: #f87171; }
+
+    /* ── MAP / ORBIT SECTION ── */
+    .contact-extra { padding: 80px 24px 120px; }
+    .contact-extra-grid {
+      display: flex;
+      gap: 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+    }
+    .extra-card {
+      flex: 1 1 300px;
+      background: rgba(20,8,42,0.6);
+      border: 1px solid rgba(139,92,246,0.12);
+      border-radius: 20px;
+      padding: 36px 32px;
+      text-align: center;
+      transition: border-color 0.3s;
+    }
+    .extra-card:hover { border-color: rgba(139,92,246,0.3); }
+    .extra-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: rgba(109,40,217,0.18);
+      border: 1px solid rgba(139,92,246,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: #a78bfa;
+      margin: 0 auto 20px;
+    }
+    .extra-card h3 { font-size: 19px; color: #e9d5ff; margin-bottom: 10px; }
+    .extra-card p { font-size: 14px; color: var(--text-muted); line-height: 1.7; margin-bottom: 20px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .contact-grid { flex-direction: column; gap: 48px; }
+      .contact-info { flex: unset; width: 100%; }
+    }
+    @media (max-width: 600px) {
+      .contact-form { padding: 32px 24px; }
+      .form-row { flex-direction: column; gap: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav" id="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo" aria-label="Rumuni home">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="18" cy="18" r="17" stroke="#7c3aed" stroke-width="1.5"/>
+          <ellipse cx="18" cy="18" rx="10" ry="5.5" stroke="#a78bfa" stroke-width="1.2" transform="rotate(-30 18 18)"/>
+          <ellipse cx="18" cy="18" rx="10" ry="5.5" stroke="#a78bfa" stroke-width="1.2" transform="rotate(30 18 18)"/>
+          <circle cx="18" cy="18" r="3" fill="#7c3aed"/>
+        </svg>
+        <span>Rumuni</span>
+      </a>
+      <button class="nav-burger" id="navBurger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="navMenu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="navMenu" role="list">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="about.html" class="nav-link">About</a></li>
+        <li><a href="services.html" class="nav-link">Services</a></li>
+        <li><a href="contact.html" class="nav-link active">Contact</a></li>
+        <li><a href="contact.html" class="btn btn-primary nav-cta">Get Started</a></li>
+      </ul>
+      <div class="nav-overlay" id="navOverlay" aria-hidden="true"></div>
+    </div>
+  </nav>
+
+  <main>
+    <!-- PAGE HERO -->
+    <header class="page-hero" aria-labelledby="contact-hero-heading">
+      <div class="page-hero-glow" aria-hidden="true"></div>
+      <div class="section-eyebrow">Say hello</div>
+      <h1 id="contact-hero-heading">Let's build<br /><span style="background: linear-gradient(135deg,#a78bfa,#7c3aed,#c4b5fd); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;">something great</span></h1>
+      <p>Tell us about your project, your workflow, or just say hi. We respond to every message within one business day.</p>
+    </header>
+
+    <!-- CONTACT BODY -->
+    <section class="contact-body" aria-labelledby="contact-form-heading">
+      <div class="contact-grid">
+
+        <!-- Info -->
+        <aside class="contact-info">
+          <div class="availability-badge">
+            <div class="availability-dot" aria-hidden="true"></div>
+            Currently taking new clients
+          </div>
+          <h2 id="contact-info-heading">We'd love to hear about your project</h2>
+          <p>Whether you're ready to start or just exploring options, drop us a message. No sales pitch, no pressure — just a real conversation about what's possible.</p>
+
+          <div class="contact-detail-list">
+            <div class="contact-detail-item">
+              <div class="contact-detail-icon"><i class="fa-solid fa-envelope" aria-hidden="true"></i></div>
+              <div class="contact-detail-text">
+                <h4>Email</h4>
+                <a href="mailto:hello@rumuni.io">hello@rumuni.io</a>
+              </div>
+            </div>
+            <div class="contact-detail-item">
+              <div class="contact-detail-icon"><i class="fa-solid fa-phone" aria-hidden="true"></i></div>
+              <div class="contact-detail-text">
+                <h4>Phone</h4>
+                <a href="tel:+1234567890">+1 (234) 567-890</a>
+              </div>
+            </div>
+            <div class="contact-detail-item">
+              <div class="contact-detail-icon"><i class="fa-solid fa-clock" aria-hidden="true"></i></div>
+              <div class="contact-detail-text">
+                <h4>Response time</h4>
+                <p>Within 1 business day</p>
+              </div>
+            </div>
+            <div class="contact-detail-item">
+              <div class="contact-detail-icon"><i class="fa-solid fa-calendar-check" aria-hidden="true"></i></div>
+              <div class="contact-detail-text">
+                <h4>Discovery calls</h4>
+                <p>Mon – Fri, 9am – 6pm GMT+8</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-socials">
+            <a href="#" class="contact-social" aria-label="Rumuni on Twitter"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+            <a href="#" class="contact-social" aria-label="Rumuni on LinkedIn"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i></a>
+            <a href="#" class="contact-social" aria-label="Rumuni on GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i></a>
+            <a href="#" class="contact-social" aria-label="Rumuni on Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+          </div>
+        </aside>
+
+        <!-- Form -->
+        <div class="contact-form-wrap">
+          <form class="contact-form" id="contactForm" novalidate aria-labelledby="contact-form-heading">
+            <h2 id="contact-form-heading" style="font-size:22px; margin-bottom:32px; color:#e9d5ff;">Send us a message</h2>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="firstName">First name</label>
+                <input type="text" id="firstName" name="firstName" placeholder="Alex" autocomplete="given-name" required />
+              </div>
+              <div class="form-group">
+                <label for="lastName">Last name</label>
+                <input type="text" id="lastName" name="lastName" placeholder="Rivera" autocomplete="family-name" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="email">Email address</label>
+              <input type="email" id="email" name="email" placeholder="you@yourdomain.com" autocomplete="email" required />
+            </div>
+            <div class="form-group">
+              <label for="service">What are you interested in?</label>
+              <select id="service" name="service" required>
+                <option value="" disabled selected>Select a service…</option>
+                <option value="automation">Workflow Automation</option>
+                <option value="web">Web Development</option>
+                <option value="api">API & Integrations</option>
+                <option value="ai">AI-Powered Tools</option>
+                <option value="analytics">Analytics & Dashboards</option>
+                <option value="support">Maintenance & Support</option>
+                <option value="other">Not sure yet — let's talk</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="budget">Approximate budget</label>
+              <select id="budget" name="budget">
+                <option value="" disabled selected>Select a range…</option>
+                <option value="under500">Under $500</option>
+                <option value="500-1500">$500 – $1,500</option>
+                <option value="1500-5000">$1,500 – $5,000</option>
+                <option value="5000+">$5,000+</option>
+                <option value="unsure">Not sure yet</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="message">Tell us about your project</label>
+              <textarea id="message" name="message" placeholder="What do you want to automate or build? What's the biggest pain point in your current workflow?" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary form-submit" id="formSubmitBtn">
+              <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
+              Send message
+            </button>
+            <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+            <p class="form-note"><i class="fa-solid fa-lock" aria-hidden="true"></i> Your info is safe. We never share or sell your data.</p>
+          </form>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- EXTRA CONTACT OPTIONS -->
+    <section class="contact-extra reveal-section" aria-labelledby="extra-heading">
+      <div class="section-header">
+        <div class="section-eyebrow">Other ways to connect</div>
+        <h2 id="extra-heading">Prefer a different approach?</h2>
+      </div>
+      <div class="contact-extra-grid" style="margin-top:48px;">
+        <div class="extra-card">
+          <div class="extra-icon"><i class="fa-solid fa-video" aria-hidden="true"></i></div>
+          <h3>Book a discovery call</h3>
+          <p>30 minutes on Zoom. No commitment required. We'll learn about your workflow and tell you exactly what's possible.</p>
+          <a href="#" class="btn btn-secondary">Schedule a call</a>
+        </div>
+        <div class="extra-card">
+          <div class="extra-icon"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i></div>
+          <h3>Connect on LinkedIn</h3>
+          <p>Follow Rumuni for automation tips, case studies, and behind-the-scenes of what we're building.</p>
+          <a href="#" class="btn btn-secondary">Follow us</a>
+        </div>
+        <div class="extra-card">
+          <div class="extra-icon"><i class="fa-brands fa-github" aria-hidden="true"></i></div>
+          <h3>See our open source work</h3>
+          <p>We contribute to the tools we use. Visit our GitHub to see what we're building in the open.</p>
+          <a href="#" class="btn btn-secondary">View GitHub</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo footer-logo" aria-label="Rumuni home">
+          <svg width="30" height="30" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="18" cy="18" r="17" stroke="#7c3aed" stroke-width="1.5"/>
+            <ellipse cx="18" cy="18" rx="10" ry="5.5" stroke="#a78bfa" stroke-width="1.2" transform="rotate(-30 18 18)"/>
+            <ellipse cx="18" cy="18" rx="10" ry="5.5" stroke="#a78bfa" stroke-width="1.2" transform="rotate(30 18 18)"/>
+            <circle cx="18" cy="18" r="3" fill="#7c3aed"/>
+          </svg>
+          <span>Rumuni</span>
+        </a>
+        <p class="footer-tagline">Automation & Web Services<br />for freelancers and creatives.</p>
+        <div class="footer-socials">
+          <a href="#" class="social-link" aria-label="Rumuni on Twitter"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+          <a href="#" class="social-link" aria-label="Rumuni on LinkedIn"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i></a>
+          <a href="#" class="social-link" aria-label="Rumuni on GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i></a>
+          <a href="#" class="social-link" aria-label="Rumuni on Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+        </div>
+      </div>
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul role="list">
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Services</h4>
+          <ul role="list">
+            <li><a href="services.html">Workflow Automation</a></li>
+            <li><a href="services.html">Web Development</a></li>
+            <li><a href="services.html">API Integrations</a></li>
+            <li><a href="services.html">AI Tools</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <ul role="list">
+            <li><a href="mailto:hello@rumuni.io">hello@rumuni.io</a></li>
+            <li><a href="tel:+1234567890">+1 (234) 567-890</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Rumuni. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="shared.js"></script>
+  <script>
+    // ── Contact form submission to n8n webhook ──
+    (function () {
+      const form = document.getElementById('contactForm');
+      const submitBtn = document.getElementById('formSubmitBtn');
+      const statusEl = document.getElementById('formStatus');
+
+      const WEBHOOK_URL = 'https://rogine02.app.n8n.cloud/webhook-test/278ddf81-38ba-43d2-9d3a-18b6a1c558ff';
+      const BASIC_AUTH_USER = 'test';
+      const BASIC_AUTH_PASS = 'test@123';
+
+      function setStatus(message, type) {
+        statusEl.textContent = message;
+        statusEl.classList.remove('success', 'error');
+        if (type) statusEl.classList.add(type);
+      }
+
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        setStatus('', null);
+
+        const payload = {
+          first_name: document.getElementById('firstName').value.trim(),
+          last_name: document.getElementById('lastName').value.trim(),
+          email: document.getElementById('email').value.trim(),
+          service: document.getElementById('service').value,
+          budget: document.getElementById('budget').value,
+          project_description: document.getElementById('message').value.trim()
+        };
+
+        const originalBtnHTML = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> Sending…';
+
+        try {
+          const response = await fetch(WEBHOOK_URL, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Basic ' + btoa(BASIC_AUTH_USER + ':' + BASIC_AUTH_PASS)
+            },
+            body: JSON.stringify(payload)
+          });
+
+          if (!response.ok) {
+            throw new Error('Request failed with status ' + response.status);
+          }
+
+          form.reset();
+          setStatus("Thanks! Your message has been sent — we'll be in touch within 1 business day.", 'success');
+        } catch (err) {
+          console.error('Contact form submission error:', err);
+          setStatus('Something went wrong sending your message. Please try again or email us directly.', 'error');
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnHTML;
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
