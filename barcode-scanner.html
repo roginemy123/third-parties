@@ -2,77 +2,615 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Barcode Scanner</title>
-
-<script src="https://unpkg.com/html5-qrcode"></script>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scanline — Barcode Scanner</title>
 <style>
-body{
-    font-family:Arial;
-    max-width:600px;
-    margin:40px auto;
-}
+  :root{
+    --ink:#0b0e0d;
+    --panel:#121613;
+    --panel-2:#181d19;
+    --line:#2a322c;
+    --phosphor:#5dff9e;
+    --phosphor-dim:#2e6b46;
+    --amber:#ffb545;
+    --text:#e8f2ec;
+    --text-dim:#8ba396;
+    --danger:#ff6b5e;
+    --mono: "SF Mono", "IBM Plex Mono", "Courier New", monospace;
+    --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0; padding:0; height:100%;
+    background:var(--ink);
+    color:var(--text);
+    font-family:var(--sans);
+    overflow-x:hidden;
+  }
+  body{
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+  }
 
-#reader{
+  /* subtle scanline texture over the whole app */
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    pointer-events:none;
+    background:repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,0.015) 0px,
+      rgba(255,255,255,0.015) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    z-index:50;
+  }
+
+  header{
+    padding:20px 24px 14px;
+    border-bottom:1px solid var(--line);
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .brand{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+  }
+  .brand .mark{
+    font-family:var(--mono);
+    font-size:13px;
+    letter-spacing:0.18em;
+    color:var(--phosphor);
+    border:1px solid var(--phosphor-dim);
+    padding:3px 7px;
+    border-radius:3px;
+  }
+  .brand h1{
+    font-size:18px;
+    font-weight:600;
+    letter-spacing:-0.01em;
+    margin:0;
+  }
+  .status-line{
+    font-family:var(--mono);
+    font-size:11.5px;
+    color:var(--text-dim);
+    letter-spacing:0.03em;
+  }
+  .status-line b{ color:var(--phosphor); font-weight:600; }
+
+  main{
+    flex:1;
+    display:grid;
+    grid-template-columns: minmax(0,1.3fr) minmax(280px, 0.9fr);
+    gap:1px;
+    background:var(--line);
+  }
+  @media (max-width: 860px){
+    main{ grid-template-columns: 1fr; }
+  }
+
+  .stage{
+    background:var(--ink);
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:28px;
+    min-height:420px;
+  }
+
+  .viewfinder{
+    position:relative;
     width:100%;
-    max-width:500px;
-    margin:auto;
-}
+    max-width:640px;
+    aspect-ratio: 4 / 3;
+    background:#000;
+    border-radius:6px;
+    overflow:hidden;
+    box-shadow: 0 0 0 1px var(--line), 0 30px 60px -30px rgba(0,0,0,0.8);
+  }
+  video{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    object-fit:cover;
+    filter: contrast(1.05) saturate(0.95);
+  }
+  canvas{ display:none; }
 
-#result{
-    margin-top:20px;
-    padding:15px;
-    background:#f5f5f5;
+  .placeholder{
+    position:absolute; inset:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    color:var(--text-dim);
+    font-family:var(--mono);
+    font-size:12.5px;
+    text-align:center;
+    padding:20px;
+  }
+  .placeholder svg{ opacity:0.5; }
+
+  /* corner brackets */
+  .brackets span{
+    position:absolute;
+    width:34px; height:34px;
+    border:2px solid var(--phosphor);
+    opacity:0.85;
+  }
+  .brackets .tl{ top:14px; left:14px; border-right:none; border-bottom:none; }
+  .brackets .tr{ top:14px; right:14px; border-left:none; border-bottom:none; }
+  .brackets .bl{ bottom:14px; left:14px; border-right:none; border-top:none; }
+  .brackets .br{ bottom:14px; right:14px; border-left:none; border-top:none; }
+
+  .scan-band{
+    position:absolute;
+    left:6%; right:6%;
+    height:2px;
+    background: linear-gradient(90deg, transparent, var(--phosphor) 20%, var(--phosphor) 80%, transparent);
+    box-shadow: 0 0 8px 1px var(--phosphor);
+    top:50%;
+    animation: sweep 2.6s ease-in-out infinite;
+    opacity:0;
+  }
+  .live .scan-band{ opacity:1; }
+  @keyframes sweep{
+    0%   { top:12%; }
+    50%  { top:88%; }
+    100% { top:12%; }
+  }
+
+  .flash{
+    position:absolute; inset:0;
+    background: var(--phosphor);
+    opacity:0;
+    pointer-events:none;
+  }
+  .flash.hit{
+    animation: flashhit 0.35s ease-out;
+  }
+  @keyframes flashhit{
+    0%{ opacity:0.55; }
+    100%{ opacity:0; }
+  }
+
+  .controls{
+    position:absolute;
+    bottom:16px;
+    left:50%;
+    transform:translateX(-50%);
+    display:flex;
+    gap:10px;
+    z-index:5;
+  }
+
+  button{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    padding:10px 16px;
+    border-radius:4px;
+    border:1px solid var(--line);
+    background:var(--panel-2);
+    color:var(--text);
+    cursor:pointer;
+    transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+  }
+  button:hover{ border-color:var(--phosphor-dim); color:var(--phosphor); }
+  button:active{ transform: translateY(1px); }
+  button.primary{
+    background:var(--phosphor);
+    color:#03130a;
+    border-color:var(--phosphor);
+    font-weight:600;
+  }
+  button.primary:hover{ background:#7bffb4; color:#03130a; }
+  button:disabled{ opacity:0.35; cursor:not-allowed; }
+  button.danger:hover{ border-color:var(--danger); color:var(--danger); }
+
+  .panel{
+    background:var(--panel);
+    display:flex;
+    flex-direction:column;
+    min-height:0;
+  }
+  .panel-head{
+    padding:16px 18px 12px;
+    border-bottom:1px solid var(--line);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .panel-head h2{
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:0.12em;
+    color:var(--text-dim);
+    margin:0;
+    font-weight:600;
+  }
+  .count-pill{
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--phosphor);
+    border:1px solid var(--phosphor-dim);
+    padding:2px 8px;
+    border-radius:20px;
+  }
+
+  .latest{
+    padding:18px;
+    border-bottom:1px solid var(--line);
+  }
+  .latest .label{
+    font-family:var(--mono);
+    font-size:10.5px;
+    text-transform:uppercase;
+    letter-spacing:0.12em;
+    color:var(--text-dim);
+    margin-bottom:8px;
+  }
+  .latest .value{
+    font-family:var(--mono);
     font-size:20px;
-}
-</style>
+    font-weight:600;
+    word-break:break-all;
+    color:var(--phosphor);
+    line-height:1.35;
+  }
+  .latest .meta{
+    margin-top:6px;
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--text-dim);
+  }
+  .latest .empty{
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--text-dim);
+  }
 
+  .history{
+    flex:1;
+    overflow-y:auto;
+    padding:6px 0;
+  }
+  .history::-webkit-scrollbar{ width:8px; }
+  .history::-webkit-scrollbar-thumb{ background:var(--line); border-radius:4px; }
+
+  .entry{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:11px 18px;
+    border-bottom:1px solid rgba(255,255,255,0.03);
+  }
+  .entry:hover{ background:rgba(255,255,255,0.02); }
+  .entry .txt{ min-width:0; }
+  .entry .code{
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--text);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .entry .fmt{
+    font-family:var(--mono);
+    font-size:10.5px;
+    color:var(--text-dim);
+    margin-top:2px;
+    display:flex;
+    gap:8px;
+  }
+  .entry .fmt .tag{
+    color:var(--amber);
+    border:1px solid rgba(255,181,69,0.35);
+    padding:0 5px;
+    border-radius:3px;
+  }
+  .copy-btn{
+    flex-shrink:0;
+    background:transparent;
+    border:1px solid var(--line);
+    padding:5px 9px;
+    font-size:10.5px;
+  }
+  .copy-btn.copied{ color:var(--phosphor); border-color:var(--phosphor-dim); }
+
+  .history-empty{
+    padding:30px 18px;
+    text-align:center;
+    color:var(--text-dim);
+    font-family:var(--mono);
+    font-size:12px;
+  }
+
+  footer{
+    padding:10px 24px;
+    border-top:1px solid var(--line);
+    font-family:var(--mono);
+    font-size:10.5px;
+    color:var(--text-dim);
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:6px;
+  }
+  a{ color:var(--phosphor); }
+
+  .unsupported{
+    max-width:420px;
+    line-height:1.6;
+  }
+  .unsupported b{ color:var(--amber); }
+</style>
 </head>
 <body>
 
-<h2>Barcode Scanner</h2>
+<header>
+  <div class="brand">
+    <span class="mark">SCN</span>
+    <h1>Scanline</h1>
+  </div>
+  <div class="status-line" id="statusLine">standby — camera not started</div>
+</header>
 
-<div id="reader"></div>
+<main>
+  <section class="stage">
+    <div class="viewfinder" id="viewfinder">
+      <video id="video" autoplay playsinline muted></video>
+      <canvas id="canvas"></canvas>
 
-<div id="result">
-Waiting for scan...
-</div>
+      <div class="placeholder" id="placeholder">
+        <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+          <path d="M3 7V5a2 2 0 0 1 2-2h2M3 17v2a2 2 0 0 0 2 2h2M21 7V5a2 2 0 0 0-2-2h-2M21 17v2a2 2 0 0 1-2 2h-2"/>
+          <path d="M7 8v8M10 8v8M13 8v8M17 8v8" stroke-width="1.2"/>
+        </svg>
+        <div id="placeholderText">Press start to activate the camera<br>and begin scanning.</div>
+      </div>
+
+      <div class="brackets">
+        <span class="tl"></span><span class="tr"></span><span class="bl"></span><span class="br"></span>
+      </div>
+      <div class="scan-band"></div>
+      <div class="flash" id="flash"></div>
+
+      <div class="controls">
+        <button class="primary" id="startBtn">Start camera</button>
+        <button id="stopBtn" disabled>Stop</button>
+      </div>
+    </div>
+  </section>
+
+  <aside class="panel">
+    <div class="latest" id="latestBlock">
+      <div class="label">Last scan</div>
+      <div class="empty" id="latestEmpty">Nothing scanned yet.</div>
+      <div class="value" id="latestValue" style="display:none;"></div>
+      <div class="meta" id="latestMeta"></div>
+    </div>
+
+    <div class="panel-head">
+      <h2>History</h2>
+      <span class="count-pill" id="countPill">0</span>
+    </div>
+    <div class="history" id="history">
+      <div class="history-empty">Scanned codes will stack up here, newest first.</div>
+    </div>
+    <div style="padding:12px 18px; border-top:1px solid var(--line);">
+      <button id="clearBtn" class="danger" style="width:100%;">Clear history</button>
+    </div>
+  </aside>
+</main>
+
+<footer>
+  <span>Uses your browser's native <a href="https://developer.mozilla.org/en-US/docs/Web/API/Barcode_Detection_API" target="_blank" rel="noopener">Barcode Detection API</a> — nothing leaves your device.</span>
+  <span id="engineNote"></span>
+</footer>
 
 <script>
+(function(){
+  const video = document.getElementById('video');
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d', { willReadFrequently: true });
+  const startBtn = document.getElementById('startBtn');
+  const stopBtn = document.getElementById('stopBtn');
+  const clearBtn = document.getElementById('clearBtn');
+  const viewfinder = document.getElementById('viewfinder');
+  const placeholder = document.getElementById('placeholder');
+  const placeholderText = document.getElementById('placeholderText');
+  const statusLine = document.getElementById('statusLine');
+  const flash = document.getElementById('flash');
+  const engineNote = document.getElementById('engineNote');
 
-function onScanSuccess(decodedText, decodedResult){
+  const latestEmpty = document.getElementById('latestEmpty');
+  const latestValue = document.getElementById('latestValue');
+  const latestMeta = document.getElementById('latestMeta');
+  const historyEl = document.getElementById('history');
+  const countPill = document.getElementById('countPill');
 
-    document.getElementById("result").innerHTML =
-        "<strong>Barcode:</strong> " + decodedText;
+  let stream = null;
+  let rafId = null;
+  let detector = null;
+  let history = [];
+  let lastCode = null;
+  let lastSeenAt = 0;
+  const REPEAT_COOLDOWN_MS = 2200;
 
-    console.log(decodedResult);
+  const hasDetectorAPI = 'BarcodeDetector' in window;
 
-    // Stop after successful scan
-    html5QrCode.stop();
-}
-
-const html5QrCode = new Html5Qrcode("reader");
-
-Html5Qrcode.getCameras().then(devices => {
-
-    if(devices && devices.length){
-
-        html5QrCode.start(
-            devices[0].id,
-            {
-                fps:10,
-                qrbox:{
-                    width:250,
-                    height:150
-                }
-            },
-            onScanSuccess
-        );
-
+  async function setup(){
+    if (!hasDetectorAPI){
+      placeholderText.innerHTML =
+        '<div class="unsupported"><b>Barcode Detection API not available</b><br>' +
+        'This browser can\'t decode barcodes natively. Try the latest Chrome, Edge, ' +
+        'or Android/Chrome on a phone. The camera preview will still work, but codes won\'t be read.</div>';
+      startBtn.disabled = false;
+      engineNote.textContent = 'engine: unsupported in this browser';
+      return;
     }
+    try {
+      const formats = await BarcodeDetector.getSupportedFormats();
+      detector = new BarcodeDetector({ formats });
+      engineNote.textContent = 'engine: native BarcodeDetector (' + formats.length + ' formats)';
+    } catch (e) {
+      detector = new BarcodeDetector();
+      engineNote.textContent = 'engine: native BarcodeDetector';
+    }
+  }
 
-});
+  async function start(){
+    startBtn.disabled = true;
+    statusLine.textContent = 'requesting camera…';
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } },
+        audio: false
+      });
+      video.srcObject = stream;
+      await video.play();
+      placeholder.style.display = 'none';
+      viewfinder.classList.add('live');
+      stopBtn.disabled = false;
+      statusLine.innerHTML = '<b>live</b> — point the camera at a barcode';
+      if (detector) scanLoop();
+    } catch (err) {
+      startBtn.disabled = false;
+      statusLine.textContent = 'camera error: ' + (err && err.message ? err.message : 'permission denied');
+      placeholderText.innerHTML =
+        '<div class="unsupported"><b>Couldn\'t access the camera</b><br>' +
+        'Check that this page has camera permission, and that no other app is using the camera. ' +
+        'If you\'re viewing this inside an embedded preview, try opening the file directly in a browser tab.</div>';
+    }
+  }
 
+  function stop(){
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = null;
+    if (stream){
+      stream.getTracks().forEach(t => t.stop());
+      stream = null;
+    }
+    viewfinder.classList.remove('live');
+    placeholder.style.display = 'flex';
+    startBtn.disabled = false;
+    stopBtn.disabled = true;
+    statusLine.textContent = 'standby — camera stopped';
+  }
+
+  let busy = false;
+  async function scanLoop(){
+    if (!stream) return;
+    if (!busy && video.readyState >= 2){
+      busy = true;
+      try {
+        const codes = await detector.detect(video);
+        if (codes && codes.length){
+          handleDetections(codes);
+        }
+      } catch (e) {
+        // detection hiccup on a single frame — ignore and keep going
+      }
+      busy = false;
+    }
+    rafId = requestAnimationFrame(scanLoop);
+  }
+
+  function handleDetections(codes){
+    const now = Date.now();
+    for (const c of codes){
+      const value = c.rawValue;
+      if (value === lastCode && (now - lastSeenAt) < REPEAT_COOLDOWN_MS) continue;
+      lastCode = value;
+      lastSeenAt = now;
+      registerScan(value, c.format);
+    }
+  }
+
+  function registerScan(value, format){
+    flash.classList.remove('hit');
+    void flash.offsetWidth;
+    flash.classList.add('hit');
+
+    const entry = { value, format, time: new Date() };
+    history.unshift(entry);
+    if (history.length > 200) history.pop();
+
+    latestEmpty.style.display = 'none';
+    latestValue.style.display = 'block';
+    latestValue.textContent = value;
+    latestMeta.textContent = format.toUpperCase() + ' · ' + entry.time.toLocaleTimeString();
+
+    renderHistory();
+  }
+
+  function renderHistory(){
+    countPill.textContent = history.length;
+    if (!history.length){
+      historyEl.innerHTML = '<div class="history-empty">Scanned codes will stack up here, newest first.</div>';
+      return;
+    }
+    historyEl.innerHTML = '';
+    history.forEach((e, i) => {
+      const row = document.createElement('div');
+      row.className = 'entry';
+      row.innerHTML =
+        '<div class="txt">' +
+          '<div class="code">' + escapeHtml(e.value) + '</div>' +
+          '<div class="fmt"><span class="tag">' + e.format.toUpperCase() + '</span><span>' + e.time.toLocaleTimeString() + '</span></div>' +
+        '</div>' +
+        '<button class="copy-btn" data-idx="' + i + '">Copy</button>';
+      historyEl.appendChild(row);
+    });
+    historyEl.querySelectorAll('.copy-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const idx = Number(btn.getAttribute('data-idx'));
+        const val = history[idx].value;
+        try {
+          await navigator.clipboard.writeText(val);
+          btn.textContent = 'Copied';
+          btn.classList.add('copied');
+          setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1200);
+        } catch (e) {
+          btn.textContent = 'Select & copy manually';
+        }
+      });
+    });
+  }
+
+  function escapeHtml(s){
+    return s.replace(/[&<>"']/g, m => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    }[m]));
+  }
+
+  clearBtn.addEventListener('click', () => {
+    history = [];
+    lastCode = null;
+    latestEmpty.style.display = 'block';
+    latestValue.style.display = 'none';
+    latestMeta.textContent = '';
+    renderHistory();
+  });
+
+  startBtn.addEventListener('click', start);
+  stopBtn.addEventListener('click', stop);
+
+  window.addEventListener('beforeunload', () => { if (stream) stream.getTracks().forEach(t => t.stop()); });
+
+  setup();
+})();
 </script>
 
 </body>
